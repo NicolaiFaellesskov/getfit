@@ -9,7 +9,7 @@ public class Main {
 
         FoodAPI foodAPI = new FoodAPI();
 
-        FoodDTO food = foodAPI.searchFood("");
+        FoodDTO food = foodAPI.searchFood("Chicken");
 
         if (food == null) {
             System.out.println("Ingen produkter fundet.");
@@ -25,7 +25,7 @@ public class Main {
                 food.getNutriments().getProtein()));
         System.out.println("Fat: " + food.getNutriments().getOrZero(food.getNutriments().getFat()));
         System.out.println("SaturedFat: " + food.getNutriments().getOrZero(
-                food.getNutriments().getSaturatedFat())
-        );
+                food.getNutriments().getSaturatedFat()));
+        System.out.println("Photo: " + food.getImageUrl());
     }
 }
