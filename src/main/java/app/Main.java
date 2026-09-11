@@ -2,14 +2,27 @@ package app;
 
 import app.persistence.FoodDTO;
 import app.services.foodService.FoodAPI;
+import app.services.foodService.FoodSearchService;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        FoodAPI foodAPI = new FoodAPI();
+        FoodSearchService foodSearchService = new FoodSearchService();
 
-        FoodDTO food = foodAPI.searchFood("Chicken");
+        Future<FoodDTO> future = foodSearchService.searchFood("Kyllingbryst");
+
+        FoodDTO food = null;
+        try {
+            food = future.get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
 
         if (food == null) {
             System.out.println("Ingen produkter fundet.");
