@@ -166,13 +166,13 @@ public class FoodAPI {
                     .path("product_name")
                     .asText("Ukendt produkt");
 
-            System.out.println(
+            /*System.out.println(
                     "Bedste match: "
                             + bestName
                             + " (score: "
                             + bestMatch.score()
                             + ")"
-            );
+            );*/
 
             return mapper.treeToValue(
                     bestMatch.product(),

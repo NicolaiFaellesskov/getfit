@@ -9,7 +9,7 @@ public class Main {
 
         FoodAPI foodAPI = new FoodAPI();
 
-        FoodDTO food = foodAPI.searchFood("Chicken nugget");
+        FoodDTO food = foodAPI.searchFood("");
 
         if (food == null) {
             System.out.println("Ingen produkter fundet.");
