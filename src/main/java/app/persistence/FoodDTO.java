@@ -30,7 +30,7 @@ public class FoodDTO {
     private String imageUrl;
 
     @JsonProperty("nutriments")
-    private Nutriments nutriments;
+    private Nutriments nutriments = new Nutriments();
 
     @Getter
     @Setter
