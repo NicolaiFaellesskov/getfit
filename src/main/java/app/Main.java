@@ -13,7 +13,7 @@ public class Main {
 
         FoodSearchService foodSearchService = new FoodSearchService();
 
-        Future<FoodDTO> future = foodSearchService.searchFood("Kyllingbryst");
+        Future<FoodDTO> future = foodSearchService.searchFood("Chicken");
 
         FoodDTO food = null;
         try {
