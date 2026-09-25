@@ -1,6 +1,6 @@
 package app;
 
-import app.persistence.FoodDTO;
+import app.DTOs.FoodDTO;
 import app.services.foodService.FoodSearchService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

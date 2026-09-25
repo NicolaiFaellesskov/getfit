@@ -1,82 +1,107 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Food List</title>
+    <title>Chicken</title>
 </head>
 
 <body>
 
-<h1>Foods</h1>
+<h1>Chicken</h1>
 
-<div id="food_list">
+<div th:if="${food != null}">
 
-    <div th:each="food : ${food_list}">
+    <h2 th:text="${food.name}">Chicken</h2>
 
-        <h2 th:text="${food.name}">Food name</h2>
+    <p>
+        <strong>Brand:</strong>
+        <span th:text="${food.brand}">Brand</span>
+    </p>
 
-        <p>
-            <strong>Brand:</strong>
-            <span th:text="${food.brand}">Brand</span>
-        </p>
+    <p>
+        <strong>Barcode:</strong>
+        <span th:text="${food.barcode}">Barcode</span>
+    </p>
 
-        <p>
-            <strong>Barcode:</strong>
-            <span th:text="${food.barcode}">Barcode</span>
-        </p>
+    <p>
+        <strong>Quantity:</strong>
+        <span th:text="${food.quantity}">Quantity</span>
+    </p>
 
-        <p>
-            <strong>Type:</strong>
-            <span th:text="${food.type}">Type</span>
-        </p>
+    <h3>Nutrition per 100g</h3>
 
-        <h3>Nutrition</h3>
+    <p>
+        <strong>Calories:</strong>
+        <span th:text="${food.nutriments.getOrZero(food.nutriments.energyKcal)}">
+            0
+        </span> kcal
+    </p>
 
-        <p>
-            <strong>Calories:</strong>
-            <span th:text="${food.calories}">0</span> kcal
-        </p>
+    <p>
+        <strong>Protein:</strong>
+        <span th:text="${food.nutriments.getOrZero(food.nutriments.protein)}">
+            0
+        </span> g
+    </p>
 
-        <p>
-            <strong>Protein:</strong>
-            <span th:text="${food.proteinGrams}">0</span> g
-        </p>
+    <p>
+        <strong>Carbohydrates:</strong>
+        <span th:text="${food.nutriments.getOrZero(food.nutriments.carbohydrates)}">
+            0
+        </span> g
+    </p>
 
-        <p>
-            <strong>Carbohydrates:</strong>
-            <span th:text="${food.carbohydratesGrams}">0</span> g
-        </p>
+    <p>
+        <strong>Fat:</strong>
+        <span th:text="${food.nutriments.getOrZero(food.nutriments.fat)}">
+            0
+        </span> g
+    </p>
 
-        <p>
-            <strong>Fat:</strong>
-            <span th:text="${food.fatGrams}">0</span> g
-        </p>
+    <p>
+        <strong>Sugar:</strong>
+        <span th:text="${food.nutriments.getOrZero(food.nutriments.sugars)}">
+            0
+        </span> g
+    </p>
 
-        <p>
-            <strong>Sugar:</strong>
-            <span th:text="${food.sugarGrams}">0</span> g
-        </p>
+    <p>
+        <strong>Fiber:</strong>
+        <span th:text="${food.nutriments.getOrZero(food.nutriments.fiber)}">
+            0
+        </span> g
+    </p>
 
-        <p>
-            <strong>Fiber:</strong>
-            <span th:text="${food.fiberGrams}">0</span> g
-        </p>
+    <p>
+        <strong>Salt:</strong>
+        <span th:text="${food.nutriments.getOrZero(food.nutriments.salt)}">
+            0
+        </span> g
+    </p>
 
-        <p>
-            <strong>Salt:</strong>
-            <span th:text="${food.saltGrams}">0</span> g
-        </p>
+    <p>
+        <strong>Saturated fat:</strong>
+        <span th:text="${food.nutriments.getOrZero(food.nutriments.saturatedFat)}">
+            0
+        </span> g
+    </p>
 
-        <p>
-            <strong>Saturated fat:</strong>
-            <span th:text="${food.saturatedFatGrams}">0</span> g
-        </p>
+    <div th:if="${food.imageUrl != null}">
+        <h3>Image</h3>
 
-        <hr>
-
+        <img
+                th:src="${food.imageUrl}"
+                th:alt="${food.name}"
+                width="250"
+        >
     </div>
 
+</div>
+
+<div th:if="${food == null}">
+    <p>Ingen produkter fundet.</p>
 </div>
 
 </body>
