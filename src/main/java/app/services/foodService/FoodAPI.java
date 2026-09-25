@@ -42,7 +42,6 @@ public class FoodAPI {
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
-                    .header("User-Agent", "GetFit/1.0 (student project)")
                     .timeout(Duration.ofSeconds(1))
                     .GET()
                     .build();
@@ -61,14 +60,14 @@ public class FoodAPI {
                     System.out.println("API gav status " + response.statusCode());
 
                     if (response.statusCode() == 503) {System.out.println("Open Food Facts er midlertidigt utilgængelig.");
-                        Thread.sleep(5000);
+                        Thread.sleep(50);
                     }
 
                 } catch (Exception e) {
 
                     System.out.println("Forbindelsesfejl: " + e.getMessage());
 
-                    Thread.sleep(3000);
+                    Thread.sleep(30);
                 }
             }
 
@@ -97,7 +96,7 @@ public class FoodAPI {
              * fritekstsøgningen for os.
              *
              * Vi bruger stadig en simpel score til at
-             * vælge det bedste resultat blandt de 20.
+             * vælge det bedste resultat blandt de 10.
              */
 
             List<ProductResult> results = new ArrayList<>();
