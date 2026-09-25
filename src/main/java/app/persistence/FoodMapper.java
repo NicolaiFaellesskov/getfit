@@ -1,4 +1,4 @@
-package app.mappers;
+package app.persistence;
 
 import app.DTOs.FoodDTO;
 import app.entities.Food;
