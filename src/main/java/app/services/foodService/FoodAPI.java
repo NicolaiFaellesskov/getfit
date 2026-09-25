@@ -1,6 +1,6 @@
 package app.services.foodService;
 
-import app.persistence.FoodDTO;
+import app.DTOs.FoodDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

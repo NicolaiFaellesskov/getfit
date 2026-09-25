@@ -1,6 +1,6 @@
 package app.services.foodService;
 
-import app.persistence.FoodDTO;
+import app.DTOs.FoodDTO;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;

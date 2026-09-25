@@ -1,15 +1,30 @@
 package app;
 
-import app.persistence.FoodDTO;
-import app.services.foodService.FoodAPI;
+import app.DTOs.FoodDTO;
+import app.config.HibernateConfig;
+import app.config.SessionConfig;
+import app.config.ThymeleafConfig;
+import app.controllers.FoodController;
 import app.services.foodService.FoodSearchService;
+import io.javalin.Javalin;
+import io.javalin.rendering.template.JavalinThymeleaf;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class Main {
+    private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
     public static void main(String[] args) {
+
+        Javalin app = Javalin.create(config -> {
+            config.staticFiles.add("/public");
+            config.jetty.modifyServletContextHandler(handler -> handler.setSessionHandler(SessionConfig.sessionConfig()));
+            config.fileRenderer(new JavalinThymeleaf(ThymeleafConfig.templateEngine()));
+        }).start(7070);
+        FoodController foodController = new FoodController(emf);
+        foodController.addRoutes(app);
 
         FoodSearchService foodSearchService = new FoodSearchService();
 
