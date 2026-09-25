@@ -48,7 +48,7 @@ public class FoodAPI {
 
             HttpResponse<String> response = null;
 
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 15; i++) {
 
                 try {
                     response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -60,14 +60,13 @@ public class FoodAPI {
                     System.out.println("API gav status " + response.statusCode());
 
                     if (response.statusCode() == 503) {System.out.println("Open Food Facts er midlertidigt utilgængelig.");
-                        Thread.sleep(50);
+                        Thread.sleep(40);
                     }
 
                 } catch (Exception e) {
 
                     System.out.println("Forbindelsesfejl: " + e.getMessage());
-
-                    Thread.sleep(30);
+                    Thread.sleep(20);
                 }
             }
 

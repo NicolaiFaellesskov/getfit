@@ -22,25 +22,32 @@ class MainTest {
     }
 
     @Test
-    void testSeachTime() {
-        long start = System.currentTimeMillis();
-        FoodSearchService foodSearchService = new FoodSearchService();
+    void testAverageSearchTime() {
+        long averageSeacrhTime = 0;
+        for (int i = 0; i < 10; i++) {
+            long start = System.currentTimeMillis();
+            FoodSearchService foodSearchService = new FoodSearchService();
 
-        Future<FoodDTO> future = foodSearchService.searchFood("Chicken");
+            Future<FoodDTO> future = foodSearchService.searchFood("Chicken");
 
-        FoodDTO food = null;
-        try {
-            food = future.get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+            FoodDTO food = null;
+            try {
+                food = future.get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+            long end = System.currentTimeMillis();
+            long time = end - start;
+            averageSeacrhTime += time;
+            System.out.println("Response tog: " + time + " ms");
+            if (food == null) {
+                System.out.println("Ingen produkter fundet.");
+
+            }
+
         }
-        long end = System.currentTimeMillis();
-        System.out.println("Response tog: " + (end - start) + " ms");
-        if (food == null) {
-            System.out.println("Ingen produkter fundet.");
-
-        }
+        System.out.println("Response tog: " + averageSeacrhTime/10 + " ms");
     }
 }
