@@ -27,83 +27,83 @@ public class FoodAPI {
 
         try {
             String encodedSearch = URLEncoder.encode(search, StandardCharsets.UTF_8);
+            List<JsonNode> allProducts = new ArrayList<>();
 
-            String url = "https://world.openfoodfacts.org/cgi/search.pl"
-                    + "?search_terms=" + encodedSearch
-                    + "&search_simple=1"
-                    + "&action=process"
-                    + "&json=1"
-                    + "&page_size=20"
-                    + "&fields=code,product_name,brands,quantity,"
-                    + "image_front_small_url,nutriments";
+            for (int page = 1; page <= 5; page++) {
 
-            System.out.println("Søger efter: " + search);
-            System.out.println("URL: " + url);
+                String url = "https://world.openfoodfacts.org/cgi/search.pl"
+                        + "?search_terms=" + encodedSearch
+                        + "&search_simple=1"
+                        + "&action=process"
+                        + "&json=1"
+                        + "&page=" + page
+                        + "&page_size=20"
+                        + "&fields=code,product_name,brands,quantity,"
+                        + "image_front_small_url,nutriments";
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .timeout(Duration.ofSeconds(1))
-                    .GET()
-                    .build();
+                System.out.println("Søger efter: " + search);
+                System.out.println("Page: " + page);
+                System.out.println("URL: " + url);
 
-            HttpResponse<String> response = null;
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url))
+                        .timeout(Duration.ofSeconds(1))
+                        .GET()
+                        .build();
 
-            for (int i = 0; i < 15; i++) {
+                HttpResponse<String> response = null;
 
-                try {
-                    response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                for (int i = 0; i < 15; i++) {
 
-                    if (response.statusCode() == 200) {
-                        break;
+                    try {
+                        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                        if (response.statusCode() == 200) {
+                            break;
+                        }
+
+                        System.out.println("API gav status " + response.statusCode());
+
+                        if (response.statusCode() == 503) {
+                            System.out.println("Open Food Facts er midlertidigt utilgængelig.");
+                            Thread.sleep(40);
+                        }
+
+                    } catch (Exception e) {
+
+                        System.out.println("Forbindelsesfejl: " + e.getMessage());
+                        Thread.sleep(20);
                     }
+                }
 
-                    System.out.println("API gav status " + response.statusCode());
+                if (response == null || response.statusCode() != 200) {
+                    System.out.println("Kunne ikke hente page " + page + ". Springer over.");
+                    continue;
+                }
 
-                    if (response.statusCode() == 503) {System.out.println("Open Food Facts er midlertidigt utilgængelig.");
-                        Thread.sleep(40);
-                    }
+                JsonNode root = mapper.readTree(response.body());
+                JsonNode products = root.path("products");
 
-                } catch (Exception e) {
+                if (!products.isArray() || products.isEmpty()) {
+                    System.out.println("Ingen flere produkter fundet på page " + page);
+                    break;
+                }
 
-                    System.out.println("Forbindelsesfejl: " + e.getMessage());
-                    Thread.sleep(20);
+                for (JsonNode product : products) {
+                    allProducts.add(product);
                 }
             }
 
-            if (response == null) {
-                throw new RuntimeException("Kunne ikke få forbindelse til Open Food Facts.");
-            }
-
-            if (response.statusCode() != 200) {
-                throw new RuntimeException("Open Food Facts returnerede HTTP " + response.statusCode());
-            }
-
-            JsonNode root = mapper.readTree(response.body());
-            JsonNode products = root.path("products");
-            for (JsonNode product : products) {
-                System.out.println(product.path("product_name").asText());
-            }
-
-            if (!products.isArray() || products.isEmpty()) {
+            if (allProducts.isEmpty()) {
                 System.out.println("Ingen produkter fundet for: " + search);
-
                 return null;
             }
 
-            /*
-             * Open Food Facts har allerede lavet selve
-             * fritekstsøgningen for os.
-             *
-             * Vi bruger stadig en simpel score til at
-             * vælge det bedste resultat blandt de 10.
-             */
-
             List<ProductResult> results = new ArrayList<>();
 
-            for (JsonNode product : products) {
+            for (JsonNode product : allProducts) {
 
                 String productName = product.path("product_name").asText("");
-
                 String brand = product.path("brands").asText("");
 
                 int score = calculateScore(search, productName, brand);
@@ -115,11 +115,7 @@ public class FoodAPI {
 
             ProductResult bestMatch = results.get(0);
 
-            String bestName = bestMatch.product().path("product_name")
-                    .asText("Ukendt produkt");
-
-
-            return mapper.treeToValue(bestMatch.product(),FoodDTO.class);
+            return mapper.treeToValue(bestMatch.product(), FoodDTO.class);
 
         } catch (Exception e) {
 
@@ -129,7 +125,7 @@ public class FoodAPI {
 
     private int calculateScore(String search, String productName, String brand) {
 
-        String searchLower = search.toLowerCase().trim();
+        String searchLower = search.toLowerCase().trim().replace("_", " ");
 
         String nameLower = productName.toLowerCase();
 
