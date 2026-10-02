@@ -1,13 +1,21 @@
+### Get alle DailyLogs
 GET http://localhost:7070/dailylogs
 
-
-###
-
+### Create DailyLog
 POST http://localhost:7070/dailylogs
 Content-Type: application/json
 
 {}
 
-###
+### Read DailyLog
+GET http://localhost:7070/dailylogs/2
+Accept: application/json
 
-DELETE http://localhost:7070/dailylogs/5
+### Update DailyLog
+PUT http://localhost:7070/dailylogs/1
+Content-Type: application/json
+
+{}
+
+### Delete DailyLog
+DELETE http://localhost:7070/dailylogs/3
