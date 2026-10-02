@@ -1,0 +1,12 @@
+### Search for food
+GET http://localhost:7070/food?search=coca_cola
+Accept: application/json
+
+### Search for Nutella
+GET http://localhost:7070/food?search=Nutella
+Accept: application/json
+
+
+### Search for Chicken
+GET http://localhost:7070/food?search=Chicken
+Accept: application/json
