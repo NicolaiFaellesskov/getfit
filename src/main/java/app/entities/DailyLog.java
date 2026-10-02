@@ -46,12 +46,4 @@ public class DailyLog {
         }
     }
 
-    @Override
-    public String toString() {
-        return "DailyLog{" +
-                "meals=" + meals +
-                ", user=" + user.getId() +
-                ", date=" + createdAt +
-                '}';
-    }
 }
