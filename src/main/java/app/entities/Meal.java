@@ -24,8 +24,9 @@ public class Meal {
     // Relation m:1
 
     @ManyToOne
-
+    @ToString.Exclude
     private DailyLog dailyLog;
+
 
     // Relation 1:m
 

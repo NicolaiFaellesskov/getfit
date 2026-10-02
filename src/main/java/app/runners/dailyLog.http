@@ -1,4 +1,4 @@
-GET http://localhost:7070/dailylogs
+GET http://localhost:7070/dailylogs/9
 
 
 ###

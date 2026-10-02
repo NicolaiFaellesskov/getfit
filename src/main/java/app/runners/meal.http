@@ -1,0 +1,7 @@
+POST http://localhost:7070/meals
+Content-Type: application/json
+
+{
+  "mealName": "Breakfast",
+  "dailyLogId": 10
+}

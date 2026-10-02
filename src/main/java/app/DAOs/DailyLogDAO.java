@@ -30,11 +30,22 @@ public class DailyLogDAO {
         EntityManager em = emf.createEntityManager();
 
         try {
-            return em.find(DailyLog.class, id);
+            return em.createQuery(
+                            "SELECT d FROM DailyLog d " +
+                                    "LEFT JOIN FETCH d.meals " +
+                                    "WHERE d.id = :id",
+                            DailyLog.class
+                    )
+                    .setParameter("id", id)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
         } finally {
             em.close();
         }
     }
+
 
     public List<DailyLog> findAll() {
         EntityManager em = emf.createEntityManager();
