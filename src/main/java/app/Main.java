@@ -1,9 +1,11 @@
 package app;
 
 import app.DAOs.DailyLogDAO;
+import app.DAOs.MealDAO;
 import app.config.HibernateConfig;
 import app.controllers.DailyLogController;
 import app.controllers.FoodController;
+import app.controllers.MealController;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -22,8 +24,12 @@ public class Main {
         DailyLogDAO dailyLogDAO = new DailyLogDAO(emf);
         DailyLogController dailyLogController =
                 new DailyLogController(dailyLogDAO);
-
         dailyLogController.addRoutes(app);
+
+        MealDAO mealDAO = new MealDAO(emf);
+        MealController mealController =
+                new MealController(mealDAO, dailyLogDAO);
+        mealController.addRoutes(app);
 
         app.start(7070);
     }

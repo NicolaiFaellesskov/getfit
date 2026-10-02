@@ -2,6 +2,7 @@ package app.controllers;
 
 import app.DAOs.DailyLogDAO;
 import app.DTOs.DailyLogDTO;
+import app.DTOs.MealDTO;
 import app.entities.DailyLog;
 import io.javalin.Javalin;
 
@@ -54,9 +55,20 @@ public class DailyLogController {
             DailyLogDTO dto = DailyLogDTO.builder()
                     .id(dailyLog.getId())
                     .createdAt(dailyLog.getCreatedAt())
+                    .meals(
+                            dailyLog.getMeals()
+                                    .stream()
+                                    .map(meal -> MealDTO.builder()
+                                            .id(meal.getId())
+                                            .mealName(meal.getMealName())
+                                            .dailyLogId(dailyLog.getId())
+                                            .build())
+                                    .collect(java.util.stream.Collectors.toSet())
+                    )
                     .build();
 
             ctx.json(dto);
+
         });
 
 
