@@ -18,34 +18,36 @@ public class FoodController {
 
     public void addRoutes(Javalin app) {
 
-        app.get("/", context -> getChicken(context));
-        app.get("/food", context -> getChicken(context));
+        app.get("/", context -> searchFood(context));
+        app.get("/food", context -> searchFood(context));
     }
 
-    private void getChicken(Context context) {
+    private void searchFood(Context context) {
+        String search = context.queryParam("search");
+        if (search == null || search.isBlank()){
+            context.status(400).result("Missing search parameter");
+            return;
+        }
 
-        Future<FoodDTO> future = foodSearchService.searchFood("Nutella");
+        Future<FoodDTO> future = foodSearchService.searchFood(search);
 
         try {
 
             FoodDTO food = future.get();
 
             if (food == null) {
-                context.render("food.html", java.util.Map.of("food", null));
+                context.status(404).result("No food found");
                 return;
             }
 
-            context.render(
-                    "food.html",
-                    java.util.Map.of("food", food)
-            );
+            context.json(food);
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
+            context.status(500).result("Search interrupted");
 
         } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+            context.status(500).result("Food search failed");
         }
     }
 }
