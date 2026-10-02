@@ -1,9 +1,10 @@
 package app;
 
+import app.DAOs.DailyLogDAO;
 import app.config.HibernateConfig;
+import app.controllers.DailyLogController;
 import app.controllers.FoodController;
 import io.javalin.Javalin;
-import io.javalin.rendering.template.JavalinThymeleaf;
 import jakarta.persistence.EntityManagerFactory;
 
 public class Main {
@@ -13,11 +14,17 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Javalin app = Javalin.create(config -> {
-        }).start(7070);
+        Javalin app = Javalin.create();
 
         FoodController foodController = new FoodController();
         foodController.addRoutes(app);
+
+        DailyLogDAO dailyLogDAO = new DailyLogDAO(emf);
+        DailyLogController dailyLogController =
+                new DailyLogController(dailyLogDAO);
+
+        dailyLogController.addRoutes(app);
+
+        app.start(7070);
     }
 }
-

@@ -1,0 +1,13 @@
+GET http://localhost:7070/dailylogs
+
+
+###
+
+POST http://localhost:7070/dailylogs
+Content-Type: application/json
+
+{}
+
+###
+
+DELETE http://localhost:7070/dailylogs/5
