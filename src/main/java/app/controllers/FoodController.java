@@ -24,29 +24,37 @@ public class FoodController {
 
     private void getChicken(Context context) {
 
-        Future<FoodDTO> future = foodSearchService.searchFood("Nutella");
-
         try {
+            Future<FoodDTO> future = foodSearchService.searchFood("Nutella");
 
             FoodDTO food = future.get();
 
             if (food == null) {
-                context.render("food.html", java.util.Map.of("food", null));
+                context.status(404).result("Food not found");
                 return;
             }
 
-            context.render(
-                    "food.html",
-                    java.util.Map.of("food", food)
-            );
+            context.json(food);
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            context.status(500).result("Interrupted: " + e.getMessage());
 
         } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            context.status(500).result(
+                    "Execution error: " + e.getCause()
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            context.status(500).result(
+                    "Error: " + e.getMessage()
+            );
         }
     }
+
+
 }
 
