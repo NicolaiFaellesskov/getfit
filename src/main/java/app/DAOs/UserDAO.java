@@ -81,6 +81,7 @@ public class UserDAO implements ISecurityDAO {
             em.close();
         }
     }
+
     @Override
     public User getVerifiedUser(String username, String password) throws ValidationException {
         EntityManager em = emf.createEntityManager();

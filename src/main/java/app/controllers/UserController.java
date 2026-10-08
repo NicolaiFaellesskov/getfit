@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.DTOs.UserDTO;
 import app.config.HibernateConfig;
 import app.DAOs.UserDAO;
 import app.entities.User;
@@ -25,13 +26,24 @@ public class UserController {
 
         User user = dao.findById(id);
 
+        UserDTO dto = UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .build();
+
         ctx.status(200);
-        ctx.json(user);
+        ctx.json(dto);
     }
 
     public void readAll(Context ctx) {
 
-        List<User> users = dao.findAll();
+        List<UserDTO> users = dao.findAll()
+                .stream()
+                .map(user -> UserDTO.builder()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .build())
+                .toList();
 
         ctx.status(200);
         ctx.json(users);
@@ -46,8 +58,14 @@ public class UserController {
                 request.getPassword()
         );
 
+        UserDTO dto = UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .passwordHash(user.getPassword())
+                .build();
+
         ctx.status(201);
-        ctx.json(user);
+        ctx.json(dto);
     }
 
     public void update(Context ctx) {

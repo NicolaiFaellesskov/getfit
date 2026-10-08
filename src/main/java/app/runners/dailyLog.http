@@ -2,13 +2,13 @@
 GET http://localhost:7070/dailylogs
 
 ### Create DailyLog
-POST http://localhost:7070/dailylogs
+POST http://localhost:7070/api/dailylogs/
 Content-Type: application/json
 
 {}
 
 ### Read DailyLog
-GET http://localhost:7070/dailylogs/2
+GET http://localhost:7070/dailylogs/10
 Accept: application/json
 
 ### Update DailyLog
