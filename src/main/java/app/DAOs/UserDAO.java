@@ -1,12 +1,15 @@
 package app.DAOs;
 
+import app.entities.Role;
 import app.entities.User;
+import app.exceptions.ValidationException;
+import app.security.ISecurityDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
-public class UserDAO {
+public class UserDAO implements ISecurityDAO {
 
     private final EntityManagerFactory emf;
 
@@ -78,4 +81,98 @@ public class UserDAO {
             em.close();
         }
     }
+    @Override
+    public User getVerifiedUser(String username, String password) throws ValidationException {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            User user = em.createQuery(
+                            "SELECT u FROM User u WHERE u.username = :username",
+                            User.class
+                    )
+                    .setParameter("username", username)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            if (user == null || !user.verifyPassword(password)) {
+                throw new ValidationException("Invalid username or password");
+            }
+
+            return user;
+
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public User createUser(String username, String password) {
+        User user = new User(username, password);
+        save(user);
+        return user;
+    }
+
+    @Override
+    public Role createRole(String role) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            Role newRole = new Role();
+            newRole.setName(role);
+
+            em.getTransaction().begin();
+            em.persist(newRole);
+            em.getTransaction().commit();
+
+            return newRole;
+
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public User addUserRole(String username, String role) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            User user = em.createQuery(
+                            "SELECT u FROM User u WHERE u.username = :username",
+                            User.class
+                    )
+                    .setParameter("username", username)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            if (user == null) {
+                throw new RuntimeException("User not found");
+            }
+
+            Role roleEntity = em.createQuery(
+                            "SELECT r FROM Role r WHERE r.name = :role",
+                            Role.class
+                    )
+                    .setParameter("role", role)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            if (roleEntity == null) {
+                throw new RuntimeException("Role not found");
+            }
+
+            em.getTransaction().begin();
+            user.addRole(roleEntity);
+            em.merge(user);
+            em.getTransaction().commit();
+
+            return user;
+
+        } finally {
+            em.close();
+        }
+    }
+
 }

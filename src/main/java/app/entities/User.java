@@ -1,7 +1,9 @@
 package app.entities;
 
+import app.security.ISecurityUser;
 import jakarta.persistence.*;
 import lombok.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +16,7 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements ISecurityUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +24,17 @@ public class User {
 
     private String username;
     private String password;
+
+    @Override
+    public boolean verifyPassword(String pw) {
+        return BCrypt.checkpw(pw, this.password);
+    }
+
+    // Security constructor
+    public User(String username, String password) {
+        this.username = username;
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+    }
 
     // Relation 1:1
 
@@ -36,6 +49,17 @@ public class User {
     @Builder.Default
     private Set<DailyLog> dailyLogs = new HashSet<>();
 
+    // Relation m:m
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @ToString.Exclude
+    @Builder.Default
+    private Set<Role> roles = new HashSet<>();
 
     // Bi-directional update
 
@@ -53,5 +77,26 @@ public class User {
         if (dailyLog != null) {
             dailyLog.setUser(this);
         }
+    }
+
+    @Override
+    public Set<String> getRolesAsStrings() {
+        Set<String> roleNames = new HashSet<>();
+
+        for (Role role : roles) {
+            roleNames.add(role.getName());
+        }
+
+        return roleNames;
+    }
+
+    @Override
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    @Override
+    public void removeRole(String role) {
+        roles.removeIf(r -> r.getName().equals(role));
     }
 }

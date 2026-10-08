@@ -1,137 +1,117 @@
 package app.controllers;
 
+import app.config.HibernateConfig;
 import app.DAOs.DailyLogDAO;
 import app.DTOs.DailyLogDTO;
 import app.DTOs.MealDTO;
 import app.entities.DailyLog;
-import io.javalin.Javalin;
+import io.javalin.http.Context;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DailyLogController {
 
-    private final DailyLogDAO dailyLogDAO;
+    private final DailyLogDAO dao;
 
-    public DailyLogController(DailyLogDAO dailyLogDAO) {
-        this.dailyLogDAO = dailyLogDAO;
+    public DailyLogController() {
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+        this.dao = new DailyLogDAO(emf);
     }
 
-    public void addRoutes(Javalin app) {
+    public void read(Context ctx) {
 
-        // GET all DailyLogs
-        app.get("/dailylogs", ctx -> {
+        int id = ctx.pathParamAsClass("id", Integer.class)
+                .check(this::validatePrimaryKey, "Not a valid id")
+                .get();
 
-            try {
-                List<DailyLogDTO> dailyLogs = dailyLogDAO.findAll()
-                        .stream()
-                        .map(dailyLog -> DailyLogDTO.builder()
-                                .id(dailyLog.getId())
-                                .createdAt(dailyLog.getCreatedAt())
-                                .build())
-                        .toList();
+        DailyLog dailyLog = dao.findById(id);
 
-                ctx.json(dailyLogs);
+        DailyLogDTO dto = DailyLogDTO.builder()
+                .id(dailyLog.getId())
+                .createdAt(dailyLog.getCreatedAt())
+                .meals(
+                        dailyLog.getMeals()
+                                .stream()
+                                .map(meal -> MealDTO.builder()
+                                        .id(meal.getId())
+                                        .mealName(meal.getMealName())
+                                        .dailyLogId(dailyLog.getId())
+                                        .build())
+                                .collect(Collectors.toSet())
+                )
+                .build();
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                ctx.status(500).result(e.getMessage());
-            }
-        });
+        ctx.status(200);
+        ctx.json(dto);
+    }
 
+    public void readAll(Context ctx) {
 
-        // GET DailyLog by ID
-        app.get("/dailylogs/{id}", ctx -> {
+        List<DailyLogDTO> dailyLogs = dao.findAll()
+                .stream()
+                .map(dailyLog -> DailyLogDTO.builder()
+                        .id(dailyLog.getId())
+                        .createdAt(dailyLog.getCreatedAt())
+                        .build())
+                .toList();
 
-            int id = Integer.parseInt(ctx.pathParam("id"));
+        ctx.status(200);
+        ctx.json(dailyLogs);
+    }
 
-            DailyLog dailyLog = dailyLogDAO.findById(id);
+    public void create(Context ctx) {
 
-            if (dailyLog == null) {
-                ctx.status(404).result("DailyLog not found");
-                return;
-            }
+        DailyLog dailyLog = ctx.bodyAsClass(DailyLog.class);
 
-            DailyLogDTO dto = DailyLogDTO.builder()
-                    .id(dailyLog.getId())
-                    .createdAt(dailyLog.getCreatedAt())
-                    .meals(
-                            dailyLog.getMeals()
-                                    .stream()
-                                    .map(meal -> MealDTO.builder()
-                                            .id(meal.getId())
-                                            .mealName(meal.getMealName())
-                                            .dailyLogId(dailyLog.getId())
-                                            .build())
-                                    .collect(java.util.stream.Collectors.toSet())
-                    )
-                    .build();
+        dailyLog.setCreatedAt(LocalDate.now());
 
-            ctx.json(dto);
+        dao.save(dailyLog);
 
-        });
+        DailyLogDTO dto = DailyLogDTO.builder()
+                .id(dailyLog.getId())
+                .createdAt(dailyLog.getCreatedAt())
+                .build();
 
+        ctx.status(201);
+        ctx.json(dto);
+    }
 
-        // POST new DailyLog
-        app.post("/dailylogs", ctx -> {
+    public void update(Context ctx) {
 
-            DailyLog dailyLog = ctx.bodyAsClass(DailyLog.class);
+        int id = ctx.pathParamAsClass("id", Integer.class)
+                .check(this::validatePrimaryKey, "Not a valid id")
+                .get();
 
-            dailyLog.setCreatedAt(LocalDate.now());
+        DailyLog dailyLog = ctx.bodyAsClass(DailyLog.class);
 
-            dailyLogDAO.save(dailyLog);
+        dailyLog.setId(id);
 
-            DailyLogDTO dto = DailyLogDTO.builder()
-                    .id(dailyLog.getId())
-                    .createdAt(dailyLog.getCreatedAt())
-                    .build();
+        dao.update(dailyLog);
 
-            ctx.status(201).json(dto);
-        });
+        DailyLogDTO dto = DailyLogDTO.builder()
+                .id(dailyLog.getId())
+                .createdAt(dailyLog.getCreatedAt())
+                .build();
 
+        ctx.status(200);
+        ctx.json(dto);
+    }
 
-        // PUT existing DailyLog
-        app.put("/dailylogs/{id}", ctx -> {
+    public void delete(Context ctx) {
 
-            int id = Integer.parseInt(ctx.pathParam("id"));
+        int id = ctx.pathParamAsClass("id", Integer.class)
+                .check(this::validatePrimaryKey, "Not a valid id")
+                .get();
 
-            DailyLog existingDailyLog = dailyLogDAO.findById(id);
+        dao.delete(id);
 
-            if (existingDailyLog == null) {
-                ctx.status(404).result("DailyLog not found");
-                return;
-            }
+        ctx.status(204);
+    }
 
-            DailyLog updatedDailyLog = ctx.bodyAsClass(DailyLog.class);
-
-            updatedDailyLog.setId(id);
-
-            dailyLogDAO.update(updatedDailyLog);
-
-            DailyLogDTO dto = DailyLogDTO.builder()
-                    .id(updatedDailyLog.getId())
-                    .createdAt(updatedDailyLog.getCreatedAt())
-                    .build();
-
-            ctx.json(dto);
-        });
-
-
-        // DELETE DailyLog
-        app.delete("/dailylogs/{id}", ctx -> {
-
-            int id = Integer.parseInt(ctx.pathParam("id"));
-
-            DailyLog dailyLog = dailyLogDAO.findById(id);
-
-            if (dailyLog == null) {
-                ctx.status(404).result("DailyLog not found");
-                return;
-            }
-
-            dailyLogDAO.delete(id);
-
-            ctx.status(204);
-        });
+    private boolean validatePrimaryKey(Integer id) {
+        return dao.findById(id) != null;
     }
 }

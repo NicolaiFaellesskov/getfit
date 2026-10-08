@@ -2,7 +2,6 @@ package app.controllers;
 
 import app.DTOs.FoodDTO;
 import app.services.foodService.FoodSearchService;
-import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import java.util.concurrent.ExecutionException;
@@ -16,39 +15,43 @@ public class FoodController {
         this.foodSearchService = new FoodSearchService();
     }
 
-    public void addRoutes(Javalin app) {
+    public void search(Context ctx) {
 
-        app.get("/", context -> searchFood(context));
-        app.get("/food", context -> searchFood(context));
-    }
+        String search = ctx.queryParam("search");
 
-    private void searchFood(Context context) {
-        String search = context.queryParam("search");
-        if (search == null || search.isBlank()){
-            context.status(400).result("Missing search parameter");
+        if (search == null || search.isBlank()) {
+            ctx.status(400);
+            ctx.result("Missing search parameter");
             return;
         }
 
-        Future<FoodDTO> future = foodSearchService.searchFood(search);
+        Future<FoodDTO> future =
+                foodSearchService.searchFood(search);
 
         try {
 
             FoodDTO food = future.get();
 
             if (food == null) {
-                context.status(404).result("No food found");
+                ctx.status(404);
+                ctx.result("No food found");
                 return;
             }
 
-            context.json(food);
+            ctx.status(200);
+            ctx.json(food);
 
         } catch (InterruptedException e) {
+
             Thread.currentThread().interrupt();
-            context.status(500).result("Search interrupted");
+
+            ctx.status(500);
+            ctx.result("Search interrupted");
 
         } catch (ExecutionException e) {
-            context.status(500).result("Food search failed");
+
+            ctx.status(500);
+            ctx.result("Food search failed");
         }
     }
 }
-

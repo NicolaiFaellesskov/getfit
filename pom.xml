@@ -23,12 +23,13 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javalin.version>6.7.0</javalin.version>
+        <javalin.version>7.0.1</javalin.version>
         <lombok.version>1.18.42</lombok.version>
         <hibernate-version>7.2.3.Final</hibernate-version>
         <thymeleaf.version>3.1.3.RELEASE</thymeleaf.version>
         <thymeleaf-extras.version>3.0.4.RELEASE</thymeleaf-extras.version>
-        <javalin-rendering.version>6.5.0</javalin-rendering.version>
+        <javalin-rendering.version>6.7.0</javalin-rendering.version>
+        <jbcrypt.version>0.4</jbcrypt.version>
     </properties>
 
     <dependencies>
@@ -160,7 +161,11 @@
             <artifactId>postgresql</artifactId>
             <version>${postgres.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>${jbcrypt.version}</version>
+        </dependency>
 
     </dependencies>
 </project>

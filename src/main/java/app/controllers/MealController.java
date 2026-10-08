@@ -1,11 +1,13 @@
 package app.controllers;
 
+import app.config.HibernateConfig;
 import app.DAOs.DailyLogDAO;
 import app.DAOs.MealDAO;
 import app.DTOs.MealDTO;
 import app.entities.DailyLog;
 import app.entities.Meal;
-import io.javalin.Javalin;
+import io.javalin.http.Context;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
@@ -14,129 +16,105 @@ public class MealController {
     private final MealDAO mealDAO;
     private final DailyLogDAO dailyLogDAO;
 
-    public MealController(MealDAO mealDAO, DailyLogDAO dailyLogDAO) {
-        this.mealDAO = mealDAO;
-        this.dailyLogDAO = dailyLogDAO;
+    public MealController() {
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+
+        this.mealDAO = new MealDAO(emf);
+        this.dailyLogDAO = new DailyLogDAO(emf);
     }
 
-    public void addRoutes(Javalin app) {
+    public void read(Context ctx) {
 
-        // GET all Meals
-        app.get("/meals", ctx -> {
+        int id = ctx.pathParamAsClass("id", Integer.class)
+                .check(this::validatePrimaryKey, "Not a valid id")
+                .get();
 
-            try {
-                List<MealDTO> meals = mealDAO.findAll()
-                        .stream()
-                        .map(this::toDTO)
-                        .toList();
+        Meal meal = mealDAO.findById(id);
 
-                ctx.json(meals);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                ctx.status(500).result(e.getMessage());
-            }
-        });
-
-
-        // GET Meal by ID
-        app.get("/meals/{id}", ctx -> {
-
-            int id = Integer.parseInt(ctx.pathParam("id"));
-
-            Meal meal = mealDAO.findById(id);
-
-            if (meal == null) {
-                ctx.status(404).result("Meal not found");
-                return;
-            }
-
-            ctx.json(toDTO(meal));
-        });
-
-
-        // POST new Meal
-        app.post("/meals", ctx -> {
-
-            MealDTO mealDTO = ctx.bodyAsClass(MealDTO.class);
-
-            // Find DailyLog med det ID, som kommer fra JSON
-            DailyLog dailyLog = dailyLogDAO.findById(
-                    mealDTO.getDailyLogId()
-            );
-
-            // Hvis DailyLog 9 ikke findes
-            if (dailyLog == null) {
-                ctx.status(404).result("DailyLog not found");
-                return;
-            }
-
-            // Opret Meal og koble den til DailyLog
-            Meal meal = Meal.builder()
-                    .mealName(mealDTO.getMealName())
-                    .dailyLog(dailyLog)
-                    .build();
-
-            // Gem Meal
-            mealDAO.save(meal);
-
-            ctx.status(201).json(toDTO(meal));
-        });
-
-
-
-        // PUT existing Meal
-        app.put("/meals/{id}", ctx -> {
-
-            int id = Integer.parseInt(ctx.pathParam("id"));
-
-            Meal existingMeal = mealDAO.findById(id);
-
-            if (existingMeal == null) {
-                ctx.status(404).result("Meal not found");
-                return;
-            }
-
-            MealDTO mealDTO = ctx.bodyAsClass(MealDTO.class);
-
-            DailyLog dailyLog = dailyLogDAO.findById(
-                    mealDTO.getDailyLogId()
-            );
-
-            if (dailyLog == null) {
-                ctx.status(404).result("DailyLog not found");
-                return;
-            }
-
-            existingMeal.setMealName(mealDTO.getMealName());
-            existingMeal.setDailyLog(dailyLog);
-
-            mealDAO.update(existingMeal);
-
-            ctx.json(toDTO(existingMeal));
-        });
-
-
-        // DELETE Meal
-        app.delete("/meals/{id}", ctx -> {
-
-            int id = Integer.parseInt(ctx.pathParam("id"));
-
-            Meal meal = mealDAO.findById(id);
-
-            if (meal == null) {
-                ctx.status(404).result("Meal not found");
-                return;
-            }
-
-            mealDAO.delete(id);
-
-            ctx.status(204);
-        });
+        ctx.status(200);
+        ctx.json(toDTO(meal));
     }
 
+    public void readAll(Context ctx) {
 
-    // Convert Meal entity to MealDTO
+        List<MealDTO> meals = mealDAO.findAll()
+                .stream()
+                .map(this::toDTO)
+                .toList();
+
+        ctx.status(200);
+        ctx.json(meals);
+    }
+
+    public void create(Context ctx) {
+
+        MealDTO request = ctx.bodyAsClass(MealDTO.class);
+
+        DailyLog dailyLog = dailyLogDAO.findById(
+                request.getDailyLogId()
+        );
+
+        if (dailyLog == null) {
+            ctx.status(404);
+            ctx.result("DailyLog not found");
+            return;
+        }
+
+        Meal meal = Meal.builder()
+                .mealName(request.getMealName())
+                .dailyLog(dailyLog)
+                .build();
+
+        mealDAO.save(meal);
+
+        ctx.status(201);
+        ctx.json(toDTO(meal));
+    }
+
+    public void update(Context ctx) {
+
+        int id = ctx.pathParamAsClass("id", Integer.class)
+                .check(this::validatePrimaryKey, "Not a valid id")
+                .get();
+
+        MealDTO request = ctx.bodyAsClass(MealDTO.class);
+
+        DailyLog dailyLog = dailyLogDAO.findById(
+                request.getDailyLogId()
+        );
+
+        if (dailyLog == null) {
+            ctx.status(404);
+            ctx.result("DailyLog not found");
+            return;
+        }
+
+        Meal meal = mealDAO.findById(id);
+
+        meal.setMealName(request.getMealName());
+        meal.setDailyLog(dailyLog);
+
+        mealDAO.update(meal);
+
+        ctx.status(200);
+        ctx.json(toDTO(meal));
+    }
+
+    public void delete(Context ctx) {
+
+        int id = ctx.pathParamAsClass("id", Integer.class)
+                .check(this::validatePrimaryKey, "Not a valid id")
+                .get();
+
+        mealDAO.delete(id);
+
+        ctx.status(204);
+    }
+
+    private boolean validatePrimaryKey(Integer id) {
+        return mealDAO.findById(id) != null;
+    }
+
     private MealDTO toDTO(Meal meal) {
 
         return MealDTO.builder()

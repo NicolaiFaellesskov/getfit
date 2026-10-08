@@ -15,6 +15,8 @@ final class EntityRegistry {
         configuration.addAnnotatedClass(Meal.class);
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(UserDetails.class);
+        configuration.addAnnotatedClass(Role.class);
+
 
         // TODO: Add more entities here...
     }

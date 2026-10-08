@@ -1,36 +1,15 @@
 package app;
 
-import app.DAOs.DailyLogDAO;
-import app.DAOs.MealDAO;
-import app.config.HibernateConfig;
-import app.controllers.DailyLogController;
-import app.controllers.FoodController;
-import app.controllers.MealController;
-import io.javalin.Javalin;
-import jakarta.persistence.EntityManagerFactory;
+import app.config.ApplicationConfig; import app.routes.Routes;
 
 public class Main {
 
-    private static final EntityManagerFactory emf =
-            HibernateConfig.getEntityManagerFactory();
-
     public static void main(String[] args) {
 
-        Javalin app = Javalin.create();
-
-        FoodController foodController = new FoodController();
-        foodController.addRoutes(app);
-
-        DailyLogDAO dailyLogDAO = new DailyLogDAO(emf);
-        DailyLogController dailyLogController =
-                new DailyLogController(dailyLogDAO);
-        dailyLogController.addRoutes(app);
-
-        MealDAO mealDAO = new MealDAO(emf);
-        MealController mealController =
-                new MealController(mealDAO, dailyLogDAO);
-        mealController.addRoutes(app);
-
-        app.start(7070);
-    }
-}
+        new ApplicationConfig()
+                .security()
+                .route(new Routes().getRoutes())
+                .cors()
+                .exceptions()
+                .apiExceptions()
+                .start(7070); } }
