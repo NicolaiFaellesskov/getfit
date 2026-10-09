@@ -5,3 +5,6 @@ Content-Type: application/json
   "username": "testuser",
   "password": "test123"
 }
+###
+GET http://localhost:7070/api/users/1
+Content-Type: application/json
