@@ -5,3 +5,7 @@ Content-Type: application/json
   "mealName": "Breakfast",
   "dailyLogId": 10
 }
+
+###
+
+GET http://localhost:7070/api/meals/1

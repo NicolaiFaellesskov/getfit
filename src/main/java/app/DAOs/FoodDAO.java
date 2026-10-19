@@ -78,4 +78,25 @@ public class FoodDAO {
             em.close();
         }
     }
+
+    public Food findByBarcode(String barcode) {
+        if (barcode == null || barcode.isBlank()) {
+            return null;
+        }
+
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            return em.createQuery(
+                            "SELECT f FROM Food f WHERE f.barcode = :barcode",
+                            Food.class
+                    )
+                    .setParameter("barcode", barcode)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+        } finally {
+            em.close();
+        }
+    }
 }

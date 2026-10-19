@@ -6,6 +6,7 @@ import app.DTOs.DailyLogDTO;
 import app.DTOs.MealDTO;
 import app.entities.DailyLog;
 import app.entities.User;
+import app.persistence.DailyLogMapper;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -55,18 +56,16 @@ public class DailyLogController {
                 .build();
 
         ctx.status(200);
-        ctx.json(dto);
+        ctx.json(DailyLogMapper.toDTO(dailyLog));
     }
 
     public void readAll(Context ctx) {
+        List<DailyLogDTO> dailyLogs = dao.findAll()
         Integer userId = ctx.attribute("userId");
 
         List<DailyLogDTO> dailyLogs = dao.findByUserId(userId)
                 .stream()
-                .map(dailyLog -> DailyLogDTO.builder()
-                        .id(dailyLog.getId())
-                        .createdAt(dailyLog.getCreatedAt())
-                        .build())
+                .map(DailyLogMapper::toDTO)
                 .toList();
 
         ctx.status(200);
@@ -90,7 +89,7 @@ public class DailyLogController {
                 .build();
 
         ctx.status(201);
-        ctx.json(dto);
+        ctx.json(DailyLogMapper.toDTO(dailyLog));
     }
 
     public void update(Context ctx) {
@@ -100,6 +99,12 @@ public class DailyLogController {
                 .check(this::validatePrimaryKey, "Not a valid id")
                 .get();
 
+        DailyLog request = ctx.bodyAsClass(DailyLog.class);
+        DailyLog existing = dao.findById(id);
+
+        existing.setCreatedAt(request.getCreatedAt() != null
+                ? request.getCreatedAt()
+                : existing.getCreatedAt());
         DailyLog existingLog = dao.findById(id);
 
         if (!belongsToUser(existingLog, userId)) {
@@ -113,15 +118,10 @@ public class DailyLogController {
         dailyLog.setId(id);
         dailyLog.setUser(existingLog.getUser());
 
-        dao.update(dailyLog);
-
-        DailyLogDTO dto = DailyLogDTO.builder()
-                .id(dailyLog.getId())
-                .createdAt(dailyLog.getCreatedAt())
-                .build();
+        dao.update(existing);
 
         ctx.status(200);
-        ctx.json(dto);
+        ctx.json(DailyLogMapper.toDTO(existing));
     }
 
     public void delete(Context ctx) {

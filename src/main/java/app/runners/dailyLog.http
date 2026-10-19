@@ -32,11 +32,7 @@ PUT http://localhost:7070/api/dailylogs/7
 Authorization: Bearer INDSÆT_BRUGER_A_TOKEN
 Content-Type: application/json
 
-{
-  "createdAt": "2026-10-08"
-}
-
-###
+{}
 
 ### 5. Bruger B: Hent alle egne DailyLogs (readAll)
 

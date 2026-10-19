@@ -30,7 +30,15 @@ public class MealDAO {
         EntityManager em = emf.createEntityManager();
 
         try {
-            return em.find(Meal.class, id);
+            return em.createQuery(
+                            "SELECT DISTINCT m FROM Meal m " +
+                                    "LEFT JOIN FETCH m.foodAmounts fa " +
+                                    "LEFT JOIN FETCH fa.food " +
+                                    "WHERE m.id = :id",
+                            Meal.class
+                    )
+                    .setParameter("id", id)
+                    .getSingleResult();
         } finally {
             em.close();
         }
@@ -41,7 +49,9 @@ public class MealDAO {
 
         try {
             return em.createQuery(
-                    "SELECT m FROM Meal m",
+                    "SELECT DISTINCT m FROM Meal m " +
+                            "LEFT JOIN FETCH m.foodAmounts fa " +
+                            "LEFT JOIN FETCH fa.food",
                     Meal.class
             ).getResultList();
         } finally {
