@@ -61,7 +61,6 @@ public class UserController {
         UserDTO dto = UserDTO.builder()
                 .id(user.getId())
                 .username(user.getUsername())
-                .passwordHash(user.getPassword())
                 .build();
 
         ctx.status(201);

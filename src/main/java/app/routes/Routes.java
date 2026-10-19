@@ -11,6 +11,7 @@ public class Routes {
     private final DailyLogRoute dailyLogRoute = new DailyLogRoute();
     private final MealRoute mealRoute = new MealRoute();
     private final FoodRoute foodRoute = new FoodRoute();
+    private final AuthRoutes authRoutes = new AuthRoutes();
 
     public EndpointGroup getRoutes() {
 
@@ -25,6 +26,8 @@ public class Routes {
             path("/meals", mealRoute.getRoutes());
 
             path("/food", foodRoute.getRoutes());
+
+            path("/auth", authRoutes.getRoutes());
         };
     }
 }

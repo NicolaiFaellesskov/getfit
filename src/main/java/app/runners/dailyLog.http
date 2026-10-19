@@ -1,21 +1,79 @@
-### Get alle DailyLogs
-GET http://localhost:7070/dailylogs
+### 1. Bruger A: Opret DailyLog
 
-### Create DailyLog
-POST http://localhost:7070/api/dailylogs/
+POST http://localhost:7070/api/dailylogs
+Authorization: Bearer INDSÆT_BRUGER_A_TOKEN
 Content-Type: application/json
 
-{}
+{
+  "createdAt": "2026-10-09"
+}
 
-### Read DailyLog
-GET http://localhost:7070/dailylogs/10
+###
+
+### 2. Bruger A: Hent alle egne DailyLogs (readAll)
+
+GET http://localhost:7070/api/dailylogs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiI4IiwiaWF0IjoxNzkyNDI2MTI5LCJleHAiOjE3OTI0Mjk3Mjl9.q_Ak5SlP8mv93QEgHFBB0Y2sbF62lxbf9U_IwskBU10
 Accept: application/json
 
-### Update DailyLog
-PUT http://localhost:7070/dailylogs/1
+###
+
+### 3. Bruger A: Hent sin DailyLog (read)
+
+GET http://localhost:7070/api/dailylogs/7
+Authorization: Bearer INDSÆT_BRUGER_A_TOKEN
+Accept: application/json
+
+###
+
+### 4. Bruger A: Opdater sin DailyLog (update)
+
+PUT http://localhost:7070/api/dailylogs/7
+Authorization: Bearer INDSÆT_BRUGER_A_TOKEN
 Content-Type: application/json
 
-{}
+{
+  "createdAt": "2026-10-08"
+}
 
-### Delete DailyLog
-DELETE http://localhost:7070/dailylogs/3
+###
+
+### 5. Bruger B: Hent alle egne DailyLogs (readAll)
+
+GET http://localhost:7070/api/dailylogs
+Authorization: Bearer INDSÆT_BRUGER_B_TOKEN
+Accept: application/json
+
+###
+
+### 6. Bruger B: Kan ikke hente bruger A's DailyLog
+
+GET http://localhost:7070/api/dailylogs/7
+Authorization: Bearer INDSÆT_BRUGER_B_TOKEN
+Accept: application/json
+
+###
+
+### 7. Bruger B: Kan ikke opdatere bruger A's DailyLog
+
+PUT http://localhost:7070/api/dailylogs/7
+Authorization: Bearer INDSÆT_BRUGER_B_TOKEN
+Content-Type: application/json
+
+{
+  "createdAt": "2026-10-07"
+}
+
+###
+
+### 8. Bruger B: Kan ikke slette bruger A's DailyLog
+
+DELETE http://localhost:7070/api/dailylogs/7
+Authorization: Bearer INDSÆT_BRUGER_B_TOKEN
+
+###
+
+### 9. Bruger A: Slet sin egen DailyLog
+
+DELETE http://localhost:7070/api/dailylogs/7
+Authorization: Bearer INDSÆT_BRUGER_A_TOKEN

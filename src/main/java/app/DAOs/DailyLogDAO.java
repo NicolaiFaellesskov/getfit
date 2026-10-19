@@ -89,4 +89,20 @@ public class DailyLogDAO {
             em.close();
         }
     }
+
+    public List<DailyLog> findByUserId(Integer userId) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            return em.createQuery(
+                            "SELECT d FROM DailyLog d WHERE d.user.id = :userId",
+                            DailyLog.class
+                    )
+                    .setParameter("userId", userId)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
 }

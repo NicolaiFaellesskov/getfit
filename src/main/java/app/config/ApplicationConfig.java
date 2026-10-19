@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import app.security.TokenService;
+import io.javalin.http.HandlerType;
+
+import java.util.Map;
+
 public class ApplicationConfig {
 
     private final ObjectMapper jsonMapper = new ObjectMapper();
@@ -42,9 +47,65 @@ public class ApplicationConfig {
         return this;
     }
 
+
     public ApplicationConfig security() {
         configSteps.add(config -> {
-            // Security kommer her
+
+            TokenService tokenService = new TokenService();
+
+            config.routes.before(ctx -> {
+
+                String path = ctx.path();
+                HandlerType method = ctx.method();
+
+                // Allow CORS preflight requests
+                if (method == HandlerType.OPTIONS) {
+                    return;
+                }
+
+                // Login must be public
+                if (path.endsWith("/auth/login")) {
+                    return;
+                }
+
+                // Allow new users to register
+                if (path.endsWith("/users")
+                        && method == HandlerType.POST) {
+                    return;
+                }
+
+                // Read the Authorization header
+                String authHeader = ctx.header("Authorization");
+
+                if (authHeader == null
+                        || !authHeader.startsWith("Bearer ")) {
+
+                    ctx.status(401).json(Map.of(
+                            "error", "Missing or invalid Authorization header"
+                    ));
+
+                    ctx.skipRemainingHandlers();
+                    return;
+                }
+
+                // Validate the JWT
+                try {
+                    String token = authHeader.substring(7);
+
+                    Integer userId =
+                            tokenService.validateToken(token);
+
+                    ctx.attribute("userId", userId);
+
+                } catch (IllegalArgumentException e) {
+
+                    ctx.status(401).json(Map.of(
+                            "error", "Invalid or expired token"
+                    ));
+
+                    ctx.skipRemainingHandlers();
+                }
+            });
         });
 
         return this;
