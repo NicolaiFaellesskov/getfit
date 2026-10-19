@@ -2,6 +2,7 @@ package app.services.foodService;
 
 import app.DTOs.FoodDTO;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,11 +18,10 @@ public class FoodSearchService {
         this.executor = Executors.newFixedThreadPool(2);
     }
 
-    public Future<FoodDTO> searchFood(String search) {
+    public Future<List<FoodDTO>> searchFood(String search) {
 
-        Callable<FoodDTO> task = () -> {
-            return foodAPI.searchFood(search);
-        };
+        Callable<List<FoodDTO>> task =
+                () -> foodAPI.searchFood(search);
 
         return executor.submit(task);
     }

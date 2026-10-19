@@ -3,14 +3,13 @@ package app.controllers;
 import app.config.HibernateConfig;
 import app.DAOs.DailyLogDAO;
 import app.DTOs.DailyLogDTO;
-import app.DTOs.MealDTO;
 import app.entities.DailyLog;
+import app.persistence.DailyLogMapper;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DailyLogController {
 
@@ -22,40 +21,20 @@ public class DailyLogController {
     }
 
     public void read(Context ctx) {
-
         int id = ctx.pathParamAsClass("id", Integer.class)
                 .check(this::validatePrimaryKey, "Not a valid id")
                 .get();
 
         DailyLog dailyLog = dao.findById(id);
 
-        DailyLogDTO dto = DailyLogDTO.builder()
-                .id(dailyLog.getId())
-                .createdAt(dailyLog.getCreatedAt())
-                .meals(
-                        dailyLog.getMeals()
-                                .stream()
-                                .map(meal -> MealDTO.builder()
-                                        .id(meal.getId())
-                                        .mealName(meal.getMealName())
-                                        .dailyLogId(dailyLog.getId())
-                                        .build())
-                                .collect(Collectors.toSet())
-                )
-                .build();
-
         ctx.status(200);
-        ctx.json(dto);
+        ctx.json(DailyLogMapper.toDTO(dailyLog));
     }
 
     public void readAll(Context ctx) {
-
         List<DailyLogDTO> dailyLogs = dao.findAll()
                 .stream()
-                .map(dailyLog -> DailyLogDTO.builder()
-                        .id(dailyLog.getId())
-                        .createdAt(dailyLog.getCreatedAt())
-                        .build())
+                .map(DailyLogMapper::toDTO)
                 .toList();
 
         ctx.status(200);
@@ -63,45 +42,35 @@ public class DailyLogController {
     }
 
     public void create(Context ctx) {
-
         DailyLog dailyLog = ctx.bodyAsClass(DailyLog.class);
 
         dailyLog.setCreatedAt(LocalDate.now());
 
         dao.save(dailyLog);
 
-        DailyLogDTO dto = DailyLogDTO.builder()
-                .id(dailyLog.getId())
-                .createdAt(dailyLog.getCreatedAt())
-                .build();
-
         ctx.status(201);
-        ctx.json(dto);
+        ctx.json(DailyLogMapper.toDTO(dailyLog));
     }
 
     public void update(Context ctx) {
-
         int id = ctx.pathParamAsClass("id", Integer.class)
                 .check(this::validatePrimaryKey, "Not a valid id")
                 .get();
 
-        DailyLog dailyLog = ctx.bodyAsClass(DailyLog.class);
+        DailyLog request = ctx.bodyAsClass(DailyLog.class);
+        DailyLog existing = dao.findById(id);
 
-        dailyLog.setId(id);
+        existing.setCreatedAt(request.getCreatedAt() != null
+                ? request.getCreatedAt()
+                : existing.getCreatedAt());
 
-        dao.update(dailyLog);
-
-        DailyLogDTO dto = DailyLogDTO.builder()
-                .id(dailyLog.getId())
-                .createdAt(dailyLog.getCreatedAt())
-                .build();
+        dao.update(existing);
 
         ctx.status(200);
-        ctx.json(dto);
+        ctx.json(DailyLogMapper.toDTO(existing));
     }
 
     public void delete(Context ctx) {
-
         int id = ctx.pathParamAsClass("id", Integer.class)
                 .check(this::validatePrimaryKey, "Not a valid id")
                 .get();

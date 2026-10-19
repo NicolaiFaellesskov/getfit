@@ -8,7 +8,7 @@ Content-Type: application/json
 {}
 
 ### Read DailyLog
-GET http://localhost:7070/dailylogs/10
+GET http://localhost:7070/api/dailylogs/10
 Accept: application/json
 
 ### Update DailyLog
@@ -19,3 +19,8 @@ Content-Type: application/json
 
 ### Delete DailyLog
 DELETE http://localhost:7070/dailylogs/3
+
+
+###
+
+GET http://localhost:7070/api/dailylogs/1
