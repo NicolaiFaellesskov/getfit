@@ -63,7 +63,6 @@ public class UserController {
         UserDTO dto = UserDTO.builder()
                 .id(user.getId())
                 .username(user.getUsername())
-                .passwordHash(user.getPassword())
                 .build();
 
         ctx.status(201);
@@ -139,7 +138,7 @@ public class UserController {
     private boolean validatePrimaryKey(Integer id) {
         return dao.findById(id) != null;
     }
-}
+
 
     public record RoleRequest(String role) {}
 }

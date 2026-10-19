@@ -60,8 +60,8 @@ public class DailyLogController {
     }
 
     public void readAll(Context ctx) {
-        List<DailyLogDTO> dailyLogs = dao.findAll()
         Integer userId = ctx.attribute("userId");
+
 
         List<DailyLogDTO> dailyLogs = dao.findByUserId(userId)
                 .stream()
