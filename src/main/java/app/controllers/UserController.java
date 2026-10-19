@@ -29,6 +29,7 @@ public class UserController {
         UserDTO dto = UserDTO.builder()
                 .id(user.getId())
                 .username(user.getUsername())
+                .roles(user.getRolesAsStrings())
                 .build();
 
         ctx.status(200);
@@ -42,6 +43,7 @@ public class UserController {
                 .map(user -> UserDTO.builder()
                         .id(user.getId())
                         .username(user.getUsername())
+                        .roles(user.getRolesAsStrings())
                         .build())
                 .toList();
 
@@ -61,6 +63,7 @@ public class UserController {
         UserDTO dto = UserDTO.builder()
                 .id(user.getId())
                 .username(user.getUsername())
+                .passwordHash(user.getPassword())
                 .build();
 
         ctx.status(201);
@@ -73,13 +76,32 @@ public class UserController {
                 .check(this::validatePrimaryKey, "Not a valid id")
                 .get();
 
-        User user = ctx.bodyAsClass(User.class);
-        user.setId(id);
+        User request = ctx.bodyAsClass(User.class);
+        User existingUser = dao.findById(id);
 
-        dao.update(user);
+        existingUser.setUsername(request.getUsername());
+
+        // Opdater kun password, hvis et nyt password er sendt.
+        if (request.getPassword() != null
+                && !request.getPassword().isBlank()) {
+            existingUser.setPassword(
+                    org.mindrot.jbcrypt.BCrypt.hashpw(
+                            request.getPassword(),
+                            org.mindrot.jbcrypt.BCrypt.gensalt()
+                    )
+            );
+        }
+
+        dao.update(existingUser);
+
+        UserDTO dto = UserDTO.builder()
+                .id(existingUser.getId())
+                .username(existingUser.getUsername())
+                .roles(existingUser.getRolesAsStrings())
+                .build();
 
         ctx.status(200);
-        ctx.json(user);
+        ctx.json(dto);
     }
 
     public void delete(Context ctx) {
@@ -93,7 +115,31 @@ public class UserController {
         ctx.status(204);
     }
 
+    public void addUserRole(Context ctx) {
+
+        String username = ctx.pathParam("username");
+
+        RoleRequest request = ctx.bodyAsClass(RoleRequest.class);
+
+        User user = dao.addUserRole(
+                username,
+                request.role()
+        );
+
+        UserDTO dto = UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .roles(user.getRolesAsStrings())
+                .build();
+
+        ctx.status(200);
+        ctx.json(dto);
+    }
+
     private boolean validatePrimaryKey(Integer id) {
         return dao.findById(id) != null;
     }
+}
+
+    public record RoleRequest(String role) {}
 }

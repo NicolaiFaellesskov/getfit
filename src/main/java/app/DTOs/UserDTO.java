@@ -2,6 +2,8 @@ package app.DTOs;
 
 import lombok.*;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -11,5 +13,5 @@ public class UserDTO {
 
     private Integer id;
     private String username;
-    private String passwordHash;
+    private Set<String> roles;
 }

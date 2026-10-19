@@ -33,7 +33,15 @@ public class UserDAO implements ISecurityDAO {
         EntityManager em = emf.createEntityManager();
 
         try {
-            return em.find(User.class, id);
+            return em.createQuery(
+                            "SELECT DISTINCT u FROM User u " +
+                                    "LEFT JOIN FETCH u.roles WHERE u.id = :id",
+                            User.class
+                    )
+                    .setParameter("id", id)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
         } finally {
             em.close();
         }
@@ -44,7 +52,8 @@ public class UserDAO implements ISecurityDAO {
 
         try {
             return em.createQuery(
-                    "SELECT m FROM User m",
+                    "SELECT DISTINCT u FROM User u " +
+                            "LEFT JOIN FETCH u.roles",
                     User.class
             ).getResultList();
         } finally {
@@ -83,12 +92,16 @@ public class UserDAO implements ISecurityDAO {
     }
 
     @Override
-    public User getVerifiedUser(String username, String password) throws ValidationException {
+    public User getVerifiedUser(String username, String password)
+            throws ValidationException {
+
         EntityManager em = emf.createEntityManager();
 
         try {
             User user = em.createQuery(
-                            "SELECT u FROM User u WHERE u.username = :username",
+                            "SELECT DISTINCT u FROM User u " +
+                                    "LEFT JOIN FETCH u.roles " +
+                                    "WHERE u.username = :username",
                             User.class
                     )
                     .setParameter("username", username)
@@ -97,7 +110,9 @@ public class UserDAO implements ISecurityDAO {
                     .orElse(null);
 
             if (user == null || !user.verifyPassword(password)) {
-                throw new ValidationException("Invalid username or password");
+                throw new ValidationException(
+                        "Invalid username or password"
+                );
             }
 
             return user;
@@ -106,7 +121,6 @@ public class UserDAO implements ISecurityDAO {
             em.close();
         }
     }
-
     @Override
     public User createUser(String username, String password) {
         User user = new User(username, password);
