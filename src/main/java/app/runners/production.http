@@ -1,0 +1,50 @@
+### Create user A — Production
+
+POST http://164.92.230.19:7070/api/users
+Content-Type: application/json
+
+{
+  "username": "jwtTestA",
+  "password": "Test1234!"
+}
+
+###
+
+### Create user B — Production
+
+POST http://164.92.230.19:7070/api/users
+Content-Type: application/json
+
+{
+  "username": "jwtTestB",
+  "password": "Test1234!"
+}
+
+###
+### Login — Production
+
+POST http://164.92.230.19:7070/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "jwtTestA",
+  "password": "Test1234!"
+}
+
+###
+
+POST http://164.92.230.19:7070/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "jwtTestB",
+  "password": "Test1234!"
+}
+
+###
+
+### Get users — Production
+
+GET http://164.92.230.19:7070/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkyNDk3MTcxLCJleHAiOjE3OTI1MDA3NzF9.ZzomxnMVYAjVpZRBjetVGBtYb273sddF-YmFwK_P5A4
+Accept: application/json
