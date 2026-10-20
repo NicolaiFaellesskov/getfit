@@ -7,6 +7,7 @@ GET http://localhost:7070/food?search=Nutella
 Accept: application/json
 
 
-### Search for Chicken
-GET http://localhost:7070/food?search=Chicken
+### Søg efter mad
+GET http://localhost:7070/api/food?search=Chicken
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxMiIsImlhdCI6MTc5MjQyNzczOCwiZXhwIjoxNzkyNDMxMzM4fQ.ePkDB2zDqAjCY3OZGJZfheqyC2IlgcWl9g_pzXESvysbc
 Accept: application/json

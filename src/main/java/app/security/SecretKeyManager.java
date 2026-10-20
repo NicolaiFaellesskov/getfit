@@ -1,8 +1,8 @@
 
 package app.security;
 
-import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
@@ -16,9 +16,18 @@ public class SecretKeyManager {
             Path.of("config", "jwt-secret.key");
 
     public static SecretKey getSecretKey() {
+
+        String secret = System.getenv("JWT_SECRET_KEY");
+
+        if (secret != null && !secret.isBlank()) {
+            return Keys.hmacShaKeyFor(
+                    Decoders.BASE64.decode(secret)
+            );
+        }
+
         try {
             if (Files.exists(KEY_FILE)) {
-                String secret = Files.readString(KEY_FILE).trim();
+                secret = Files.readString(KEY_FILE).trim();
 
                 return Keys.hmacShaKeyFor(
                         Decoders.BASE64.decode(secret)
@@ -31,8 +40,7 @@ public class SecretKeyManager {
                     io.jsonwebtoken.SignatureAlgorithm.HS256
             );
 
-            String secret = Encoders.BASE64.encode(key.getEncoded());
-
+            secret = Encoders.BASE64.encode(key.getEncoded());
             Files.writeString(KEY_FILE, secret);
 
             return key;
