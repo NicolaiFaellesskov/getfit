@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 
 class MainTest {
 
@@ -37,11 +38,11 @@ class MainTest {
             long start = System.currentTimeMillis();
             FoodSearchService foodSearchService = new FoodSearchService();
 
-            Future<FoodDTO> future = foodSearchService.searchFood("Chicken");
+            Future<List<FoodDTO>> future = foodSearchService.searchFood("Chicken");
 
-            FoodDTO food = null;
+            List<FoodDTO> foods = null;
             try {
-                food = future.get();
+                foods = future.get();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } catch (ExecutionException e) {
@@ -51,9 +52,8 @@ class MainTest {
             long time = end - start;
             averageSeacrhTime += time;
             System.out.println("Response tog: " + time + " ms");
-            if (food == null) {
+            if (foods == null || foods.isEmpty()) {
                 System.out.println("Ingen produkter fundet.");
-
             }
 
         }
