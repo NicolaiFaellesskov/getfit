@@ -46,5 +46,5 @@ Content-Type: application/json
 ### Get users — Production
 
 GET http://164.92.230.19:7070/api/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkyNDk3MTcxLCJleHAiOjE3OTI1MDA3NzF9.ZzomxnMVYAjVpZRBjetVGBtYb273sddF-YmFwK_P5A4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkyNTAyNTcyLCJleHAiOjE3OTI1MDYxNzJ9.FgQAa4tM1G95jFLnXYKw6TLEwlw_Kt_v2lnI2-6WwsU
 Accept: application/json
