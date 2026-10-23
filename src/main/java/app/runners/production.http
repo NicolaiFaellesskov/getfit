@@ -1,10 +1,10 @@
 ### Create user A — Production
 
-POST http://164.92.230.19:7070/api/users
+POST https://api.getfitter.dk/api/users
 Content-Type: application/json
 
 {
-  "username": "jwtTestA",
+  "username": "jwtTestD",
   "password": "Test1234!"
 }
 
@@ -12,7 +12,7 @@ Content-Type: application/json
 
 ### Create user B — Production
 
-POST http://164.92.230.19:7070/api/users
+POST https://api.getfitter.dk/api/users
 Content-Type: application/json
 
 {
@@ -23,17 +23,17 @@ Content-Type: application/json
 ###
 ### Login — Production
 
-POST http://164.92.230.19:7070/api/auth/login
+POST https://api.getfitter.dk/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "jwtTestA",
+  "username": "jwtTestD",
   "password": "Test1234!"
 }
 
 ###
 
-POST http://164.92.230.19:7070/api/auth/login
+POST https://api.getfitter.dk/api/auth/login
 Content-Type: application/json
 
 {
@@ -45,6 +45,6 @@ Content-Type: application/json
 
 ### Get users — Production
 
-GET http://164.92.230.19:7070/api/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkyNTAyNTcyLCJleHAiOjE3OTI1MDYxNzJ9.FgQAa4tM1G95jFLnXYKw6TLEwlw_Kt_v2lnI2-6WwsU
+GET https://api.getfitter.dk/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiI1IiwiaWF0IjoxNzkyNzUzMjQ2LCJleHAiOjE3OTI3NTY4NDZ9.thGKm5TznHkuoU5IhxbedMIxBF2Qwy_PvV5z5SSPQPc
 Accept: application/json
