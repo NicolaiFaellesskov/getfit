@@ -19,3 +19,4 @@ Content-Type: application/json
 ###
 
 GET http://localhost:7070/api/food/food?search=kylling
+

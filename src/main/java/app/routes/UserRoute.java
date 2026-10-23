@@ -1,24 +1,24 @@
-    package app.routes;
+        package app.routes;
 
-    import app.controllers.UserController;
-    import io.javalin.apibuilder.EndpointGroup;
+        import app.controllers.UserController;
+        import io.javalin.apibuilder.EndpointGroup;
 
-    import static io.javalin.apibuilder.ApiBuilder.*;
+        import static io.javalin.apibuilder.ApiBuilder.*;
 
-    public class UserRoute {
+        public class UserRoute {
 
-        private final UserController userController = new UserController();
+            private final UserController userController = new UserController();
 
-        public EndpointGroup getRoutes() {
+            public EndpointGroup getRoutes() {
 
-            return () -> {
-                get("/", userController::readAll);
-                get("/{id}", userController::read);
-                post("/", userController::create);
-                post("/{username}/roles", userController::addUserRole);
-                put("/{id}", userController::update);
-                delete("/{id}", userController::delete);
-            };
+                return () -> {
+                    get("/", userController::readAll);
+                    get("/{id}", userController::read);
+                    post("/", userController::create);
+                    post("/{username}/roles", userController::addUserRole);
+                    put("/{id}", userController::update);
+                    delete("/{id}", userController::delete);
+                };
+            }
         }
-    }
 

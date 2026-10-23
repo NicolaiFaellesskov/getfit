@@ -59,3 +59,4 @@ Accept: application/json
 GET http://localhost:7070/api/users
 Authorization: Bearer INDSÆT_BRUGER_B_TOKEN
 Accept: application/json
+
