@@ -18,7 +18,7 @@
                 post("/", mealController::create);
                 put("/{id}", mealController::update);
                 delete("/{id}", mealController::delete);
-                post("/{id}/food", mealController::addFood);
+                post("/{id}/food", mealController::addFoodAmount);
 
             };
         }

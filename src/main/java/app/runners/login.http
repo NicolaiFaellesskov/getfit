@@ -4,7 +4,7 @@ POST http://localhost:7070/api/users
 Content-Type: application/json
 
 {
-  "username": "jwtTestA",
+  "username": "jwtTestC",
   "password": "Test1234!"
 }
 
@@ -28,7 +28,7 @@ POST http://localhost:7070/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "jwtTestA",
+  "username": "jwtTestC",
   "password": "Test1234!"
 }
 

@@ -166,7 +166,7 @@ public class MealController {
         ctx.status(204);
     }
 
-    public void addFood(Context ctx) {
+    public void addFoodAmount(Context ctx) {
         int mealId = ctx.pathParamAsClass("id", Integer.class).get();
 
         Meal meal = mealDAO.findById(mealId);

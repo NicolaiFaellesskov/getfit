@@ -3,11 +3,12 @@ GET http://localhost:7070/food?search=coca_cola
 Accept: application/json
 
 ### Search for Nutella
-GET http://localhost:7070/food?search=Nutella
+GET http://localhost:7070/api/food?search=Nutella
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMDQyMTIyLCJleHAiOjE3OTMwNDU3MjJ9.eZA0TV6G8gOiQZytngVGU65JDrGKc-5m2vzc5x5p6GA
 Accept: application/json
 
 
-### Search for
+### Søg efter mad
 GET https://api.getfitter.dk/api/food?search=Chicken
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkyNzU5ODIxLCJleHAiOjE3OTI3NjM0MjF9.V2c-__CWS2rO9ii7D9pex8cEhREUMwQIT0ggx57SGsc
 Accept: application/json

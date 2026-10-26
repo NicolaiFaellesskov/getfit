@@ -96,7 +96,11 @@ public class DailyLogDAO {
 
         try {
             return em.createQuery(
-                            "SELECT d FROM DailyLog d WHERE d.user.id = :userId",
+                            "SELECT DISTINCT d FROM DailyLog d " +
+                                    "LEFT JOIN FETCH d.meals m " +
+                                    "LEFT JOIN FETCH m.foodAmounts fa " +
+                                    "LEFT JOIN FETCH fa.food " +
+                                    "WHERE d.user.id = :userId",
                             DailyLog.class
                     )
                     .setParameter("userId", userId)
