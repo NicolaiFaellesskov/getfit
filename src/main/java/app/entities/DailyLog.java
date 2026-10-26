@@ -39,9 +39,8 @@ public class DailyLog {
     // Bi-directional update
 
     public void addMeal(Meal meal) {
-        this.meals.add(meal);
-
         if (meal != null) {
+            this.meals.add(meal);
             meal.setDailyLog(this);
         }
     }

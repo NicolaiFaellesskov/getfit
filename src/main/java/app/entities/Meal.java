@@ -38,9 +38,8 @@ public class Meal {
     // Bi-directional update
 
     public void addFoodAmount(FoodAmount foodAmount) {
-        this.foodAmounts.add(foodAmount);
-
         if (foodAmount != null) {
+            this.foodAmounts.add(foodAmount);
             foodAmount.setMeal(this);
         }
     }

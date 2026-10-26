@@ -22,7 +22,7 @@ public class FoodAmountMapper {
                                 ? entity.getFood().getName()
                                 : null
                 )
-                .amount(entity.getAmount())
+                .amount(entity.getGram())
                 .build();
     }
 }

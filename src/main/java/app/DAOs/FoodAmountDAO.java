@@ -1,6 +1,6 @@
 package app.DAOs;
 
-import app.entities.Food;
+
 import app.entities.FoodAmount;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -42,7 +42,7 @@ public class FoodAmountDAO {
 
         try {
             return em.createQuery(
-                    "SELECT m FROM FoodAmount m",
+                    "SELECT fa FROM FoodAmount fa",
                     FoodAmount.class
             ).getResultList();
         } finally {
@@ -75,6 +75,21 @@ public class FoodAmountDAO {
             }
 
             em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+    public List<FoodAmount> findByUserId(Integer userId) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            return em.createQuery(
+                            "SELECT fa FROM FoodAmount fa " +
+                                    "WHERE fa.meal.dailyLog.user.id = :userId",
+                            FoodAmount.class
+                    )
+                    .setParameter("userId", userId)
+                    .getResultList();
         } finally {
             em.close();
         }

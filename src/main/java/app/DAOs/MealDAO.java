@@ -38,7 +38,9 @@ public class MealDAO {
                             Meal.class
                     )
                     .setParameter("id", id)
-                    .getSingleResult();
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
         } finally {
             em.close();
         }

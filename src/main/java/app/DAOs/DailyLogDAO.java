@@ -31,8 +31,10 @@ public class DailyLogDAO {
 
         try {
             return em.createQuery(
-                            "SELECT d FROM DailyLog d " +
-                                    "LEFT JOIN FETCH d.meals " +
+                            "SELECT DISTINCT d FROM DailyLog d " +
+                                    "LEFT JOIN FETCH d.meals m " +
+                                    "LEFT JOIN FETCH m.foodAmounts fa " +
+                                    "LEFT JOIN FETCH fa.food " +
                                     "WHERE d.id = :id",
                             DailyLog.class
                     )
@@ -40,7 +42,6 @@ public class DailyLogDAO {
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
-
         } finally {
             em.close();
         }
@@ -104,5 +105,6 @@ public class DailyLogDAO {
             em.close();
         }
     }
+
 
 }
