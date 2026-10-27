@@ -1,7 +1,7 @@
 ### 1. Bruger A: Opret DailyLog
 
 POST http://localhost:7070/api/dailylogs
-Authorization: Bearer INDSÆT_BRUGER_A_TOKEN
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxNiIsImlhdCI6MTc5MzA0MjUwNCwiZXhwIjoxNzkzMDQ2MTA0fQ.rXLJLEgaHnsfU9Syr1bIYBJ4g905Ee2W27tJR_cQ38w
 Content-Type: application/json
 
 {
@@ -13,14 +13,14 @@ Content-Type: application/json
 ### 2. Bruger A: Hent alle egne DailyLogs (readAll)
 
 GET http://localhost:7070/api/dailylogs
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiI4IiwiaWF0IjoxNzkyNDI2MTI5LCJleHAiOjE3OTI0Mjk3Mjl9.q_Ak5SlP8mv93QEgHFBB0Y2sbF62lxbf9U_IwskBU10
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxNiIsImlhdCI6MTc5MzA0MjUwNCwiZXhwIjoxNzkzMDQ2MTA0fQ.rXLJLEgaHnsfU9Syr1bIYBJ4g905Ee2W27tJR_cQ38w
 Accept: application/json
 
 ###
 
 ### 3. Bruger A: Hent sin DailyLog (read)
 
-GET http://localhost:7070/api/dailylogs/7
+GET http://localhost:7070/api/dailylogs/14
 Authorization: Bearer INDSÆT_BRUGER_A_TOKEN
 Accept: application/json
 

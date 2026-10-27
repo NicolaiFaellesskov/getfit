@@ -1,11 +1,33 @@
+### Opret Breakfast
 POST http://localhost:7070/api/meals/
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxNiIsImlhdCI6MTc5MzA0MjUwNCwiZXhwIjoxNzkzMDQ2MTA0fQ.rXLJLEgaHnsfU9Syr1bIYBJ4g905Ee2W27tJR_cQ38w
 Content-Type: application/json
 
 {
   "mealName": "Breakfast",
-  "dailyLogId": 10
+  "dailyLogId": 14
 }
 
 ###
 
 GET http://localhost:7070/api/meals/1
+
+
+### Add food to meal
+POST http://localhost:7070/api/meals/1/food
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxNiIsImlhdCI6MTc5MzA0MjUwNCwiZXhwIjoxNzkzMDQ2MTA0fQ.rXLJLEgaHnsfU9Syr1bIYBJ4g905Ee2W27tJR_cQ38w
+Content-Type: application/json
+
+{
+  "food": {
+    "code": "3017620422003",
+    "product_name": "Nutella",
+    "brands": "Ferrero"
+  },
+  "amount": 30
+}
+
+### Get meal with food
+GET http://localhost:7070/api/meals/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxNiIsImlhdCI6MTc5MzA0MjUwNCwiZXhwIjoxNzkzMDQ2MTA0fQ.rXLJLEgaHnsfU9Syr1bIYBJ4g905Ee2W27tJR_cQ38w
+Accept: application/json

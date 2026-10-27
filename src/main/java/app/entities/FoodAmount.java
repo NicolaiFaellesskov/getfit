@@ -16,15 +16,17 @@ public class FoodAmount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private int amount;
+    private int gram;
 
     // Relation m:1
 
     @ManyToOne
+    @ToString.Exclude
     private Meal meal;
 
     // Relation m:1
 
     @ManyToOne
+    @ToString.Exclude
     private Food food;
 }

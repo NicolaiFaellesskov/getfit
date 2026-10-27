@@ -73,9 +73,8 @@ public class User implements ISecurityUser {
     }
 
     public void addDailyLog(DailyLog dailyLog) {
-        this.dailyLogs.add(dailyLog);
-
         if (dailyLog != null) {
+            this.dailyLogs.add(dailyLog);
             dailyLog.setUser(this);
         }
     }

@@ -30,7 +30,7 @@ public class MealDAO {
         EntityManager em = emf.createEntityManager();
 
         try {
-            List<Meal> meals = em.createQuery(
+            return em.createQuery(
                             "SELECT DISTINCT m FROM Meal m " +
                                     "LEFT JOIN FETCH m.foodAmounts fa " +
                                     "LEFT JOIN FETCH fa.food " +
@@ -38,10 +38,9 @@ public class MealDAO {
                             Meal.class
                     )
                     .setParameter("id", id)
-                    .getResultList();
-
-            return meals.isEmpty() ? null : meals.get(0);
-
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
         } finally {
             em.close();
         }

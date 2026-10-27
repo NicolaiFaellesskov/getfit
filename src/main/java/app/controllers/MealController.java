@@ -38,19 +38,32 @@ public class MealController {
     }
 
     public void read(Context ctx) {
-        int id = ctx.pathParamAsClass("id", Integer.class)
-                .check(this::validatePrimaryKey, "Not a valid id")
-                .get();
+        Integer userId = ctx.attribute("userId");
+
+        int id = ctx.pathParamAsClass("id", Integer.class).get();
 
         Meal meal = mealDAO.findById(id);
+
+        if (meal == null) {
+            ctx.status(404).result("Meal not found");
+            return;
+        }
+
+        if (!belongsToUser(meal, userId)) {
+            ctx.status(403).result("Access denied");
+            return;
+        }
 
         ctx.status(200);
         ctx.json(MealMapper.toDTO(meal));
     }
 
     public void readAll(Context ctx) {
+        Integer userId = ctx.attribute("userId");
+
         List<MealDTO> meals = mealDAO.findAll()
                 .stream()
+                .filter(meal -> belongsToUser(meal, userId))
                 .map(MealMapper::toDTO)
                 .toList();
 
@@ -59,6 +72,7 @@ public class MealController {
     }
 
     public void create(Context ctx) {
+        Integer userId = ctx.attribute("userId");
         MealDTO request = ctx.bodyAsClass(MealDTO.class);
 
         DailyLog dailyLog = dailyLogDAO.findById(
@@ -67,6 +81,12 @@ public class MealController {
 
         if (dailyLog == null) {
             ctx.status(404).result("DailyLog not found");
+            return;
+        }
+
+        if (dailyLog.getUser() == null
+                || !dailyLog.getUser().getId().equals(userId)) {
+            ctx.status(403).result("Access denied");
             return;
         }
 
@@ -74,7 +94,7 @@ public class MealController {
                 .mealName(request.getMealName())
                 .dailyLog(dailyLog)
                 .build();
-
+        dailyLog.addMeal(meal);
         mealDAO.save(meal);
 
         ctx.status(201);
@@ -82,9 +102,21 @@ public class MealController {
     }
 
     public void update(Context ctx) {
-        int id = ctx.pathParamAsClass("id", Integer.class)
-                .check(this::validatePrimaryKey, "Not a valid id")
-                .get();
+        Integer userId = ctx.attribute("userId");
+
+        int id = ctx.pathParamAsClass("id", Integer.class).get();
+
+        Meal meal = mealDAO.findById(id);
+
+        if (meal == null) {
+            ctx.status(404).result("Meal not found");
+            return;
+        }
+
+        if (!belongsToUser(meal, userId)) {
+            ctx.status(403).result("Access denied");
+            return;
+        }
 
         MealDTO request = ctx.bodyAsClass(MealDTO.class);
 
@@ -97,7 +129,11 @@ public class MealController {
             return;
         }
 
-        Meal meal = mealDAO.findById(id);
+        if (dailyLog.getUser() == null
+                || !dailyLog.getUser().getId().equals(userId)) {
+            ctx.status(403).result("Access denied");
+            return;
+        }
 
         meal.setMealName(request.getMealName());
         meal.setDailyLog(dailyLog);
@@ -109,22 +145,41 @@ public class MealController {
     }
 
     public void delete(Context ctx) {
-        int id = ctx.pathParamAsClass("id", Integer.class)
-                .check(this::validatePrimaryKey, "Not a valid id")
-                .get();
+        Integer userId = ctx.attribute("userId");
+
+        int id = ctx.pathParamAsClass("id", Integer.class).get();
+
+        Meal meal = mealDAO.findById(id);
+
+        if (meal == null) {
+            ctx.status(404).result("Meal not found");
+            return;
+        }
+
+        if (!belongsToUser(meal, userId)) {
+            ctx.status(403).result("Access denied");
+            return;
+        }
 
         mealDAO.delete(id);
 
         ctx.status(204);
     }
 
-    public void addFood(Context ctx) {
+    public void addFoodAmount(Context ctx) {
         int mealId = ctx.pathParamAsClass("id", Integer.class).get();
 
         Meal meal = mealDAO.findById(mealId);
 
         if (meal == null) {
             ctx.status(404).result("Meal not found");
+            return;
+        }
+
+        Integer userId = ctx.attribute("userId");
+
+        if (!belongsToUser(meal, userId)) {
+            ctx.status(403).result("Access denied");
             return;
         }
 
@@ -155,10 +210,9 @@ public class MealController {
         // Knyt produktet til måltidet med den angivne mængde
         FoodAmount foodAmount = FoodAmount.builder()
                 .food(food)
-                .meal(meal)
-                .amount(request.getAmount())
+                .gram(request.getAmount())
                 .build();
-
+        meal.addFoodAmount(foodAmount);
         foodAmountDAO.save(foodAmount);
 
         ctx.status(201);
@@ -167,5 +221,11 @@ public class MealController {
 
     private boolean validatePrimaryKey(Integer id) {
         return mealDAO.findById(id) != null;
+    }
+    private boolean belongsToUser(Meal meal, Integer userId) {
+        return meal != null
+                && meal.getDailyLog() != null
+                && meal.getDailyLog().getUser() != null
+                && meal.getDailyLog().getUser().getId().equals(userId);
     }
 }
