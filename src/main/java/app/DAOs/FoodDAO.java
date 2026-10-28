@@ -1,8 +1,11 @@
 package app.DAOs;
 
 import app.entities.Food;
+import app.exceptions.DatabaseException;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 
@@ -14,7 +17,7 @@ public class FoodDAO {
         this.emf = emf;
     }
 
-    public Food save(Food food) {
+    public Food save(Food food) throws DatabaseException {
         EntityManager em = emf.createEntityManager();
 
         try {
@@ -22,84 +25,15 @@ public class FoodDAO {
             em.persist(food);
             em.getTransaction().commit();
             return food;
-        } catch (RuntimeException e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw e;
+        } catch (EntityExistsException e) {
+            throw new DatabaseException("Error with saving food", e.getMessage());
         } finally {
             em.close();
         }
     }
 
-    public Food findById(int id) {
-        EntityManager em = emf.createEntityManager();
 
-        try {
-            return em.find(Food.class, id);
-        } finally {
-            em.close();
-        }
-    }
-
-    public List<Food> findAll() {
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            return em.createQuery(
-                    "SELECT f FROM Food f",
-                    Food.class
-            ).getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    public Food update(Food food) {
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            em.getTransaction().begin();
-            Food updatedFood = em.merge(food);
-            em.getTransaction().commit();
-            return updatedFood;
-        } catch (RuntimeException e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw e;
-        } finally {
-            em.close();
-        }
-    }
-
-    public boolean delete(int id) {
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            em.getTransaction().begin();
-
-            Food food = em.find(Food.class, id);
-
-            if (food == null) {
-                em.getTransaction().rollback();
-                return false;
-            }
-
-            em.remove(food);
-            em.getTransaction().commit();
-            return true;
-        } catch (RuntimeException e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw e;
-        } finally {
-            em.close();
-        }
-    }
-
-    public Food findByBarcode(String barcode) {
+    public Food findByBarcode(String barcode) throws DatabaseException {
         if (barcode == null || barcode.isBlank()) {
             return null;
         }
@@ -107,7 +41,7 @@ public class FoodDAO {
         EntityManager em = emf.createEntityManager();
 
         try {
-            return em.createQuery(
+            Food food = em.createQuery(
                             "SELECT f FROM Food f WHERE f.barcode = :barcode",
                             Food.class
                     )
@@ -115,6 +49,10 @@ public class FoodDAO {
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
+            if (food == null) {
+                throw new DatabaseException("error, barcode does not exist");
+            }
+            return food;
         } finally {
             em.close();
         }

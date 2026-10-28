@@ -1,8 +1,11 @@
 package app.DAOs;
 
 import app.entities.DailyLog;
+import app.exceptions.ApiException;
+import app.exceptions.DatabaseException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.PersistenceException;
 
 import java.util.List;
 
@@ -14,23 +17,25 @@ public class DailyLogDAO {
         this.emf = emf;
     }
 
-    public void save(DailyLog dailyLog) {
+    public void save(DailyLog dailyLog) throws DatabaseException {
         EntityManager em = emf.createEntityManager();
 
         try {
             em.getTransaction().begin();
             em.persist(dailyLog);
             em.getTransaction().commit();
+        } catch (RuntimeException e) {
+            throw new DatabaseException("Error, can't save dailyLog", e.getMessage());
         } finally {
             em.close();
         }
     }
 
-    public DailyLog findById(int id) {
+    public DailyLog findById(int id) throws DatabaseException {
         EntityManager em = emf.createEntityManager();
 
         try {
-            return em.createQuery(
+            DailyLog dailyLog = em.createQuery(
                             "SELECT DISTINCT d FROM DailyLog d " +
                                     "LEFT JOIN FETCH d.meals m " +
                                     "LEFT JOIN FETCH m.foodAmounts fa " +
@@ -42,60 +47,56 @@ public class DailyLogDAO {
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
+            if (dailyLog == null) {
+                throw new DatabaseException("Error, dailyLog does not exist");
+            }
+            return dailyLog;
         } finally {
             em.close();
         }
     }
 
 
-    public List<DailyLog> findAll() {
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            return em.createQuery(
-                    "SELECT m FROM DailyLog m",
-                    DailyLog.class
-            ).getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    public void update(DailyLog dailyLog) {
+    public void update(DailyLog dailyLog) throws DatabaseException {
         EntityManager em = emf.createEntityManager();
 
         try {
             em.getTransaction().begin();
             em.merge(dailyLog);
             em.getTransaction().commit();
+        } catch (PersistenceException e) {
+            throw new DatabaseException("Error, cannot update", e.getMessage());
         } finally {
             em.close();
         }
     }
 
-    public void delete(int id) {
+    public void delete(int id)throws DatabaseException {
         EntityManager em = emf.createEntityManager();
 
         try {
             em.getTransaction().begin();
 
             DailyLog dailyLog = em.find(DailyLog.class, id);
-
+            if (dailyLog == null) {
+                throw new DatabaseException("DailyLog does not exist");
+            }
             if (dailyLog != null) {
                 em.remove(dailyLog);
             }
 
             em.getTransaction().commit();
-        } finally {
+
+        }finally {
             em.close();
         }
     }
 
-    public List<DailyLog> findByUserId(Integer userId) {
+    public List<DailyLog> findByUserId(Integer userId)throws DatabaseException {
         EntityManager em = emf.createEntityManager();
 
         try {
-            return em.createQuery(
+            List<DailyLog> dailyLogs = em.createQuery(
                             "SELECT DISTINCT d FROM DailyLog d " +
                                     "LEFT JOIN FETCH d.meals m " +
                                     "LEFT JOIN FETCH m.foodAmounts fa " +
@@ -105,6 +106,10 @@ public class DailyLogDAO {
                     )
                     .setParameter("userId", userId)
                     .getResultList();
+            if (dailyLogs.isEmpty()){
+                throw new DatabaseException("Error, user dont have any dailyLogs");
+            }
+            return dailyLogs;
         } finally {
             em.close();
         }

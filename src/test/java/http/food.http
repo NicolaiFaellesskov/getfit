@@ -1,10 +1,10 @@
 ### Search for food
-GET http://localhost:7070/food?search=coca_cola
+GET http://localhost:7070/food?search=coca
 Accept: application/json
 
 ### Search for Nutella
 GET http://localhost:7070/api/food?search=Nutella
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMDQyMTIyLCJleHAiOjE3OTMwNDU3MjJ9.eZA0TV6G8gOiQZytngVGU65JDrGKc-5m2vzc5x5p6GA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMTg5MjU2LCJleHAiOjE3OTMxOTI4NTZ9.ffN81wY4rpfQVqt1gk2ccxwng4azICH20wKGg9MDLoU
 Accept: application/json
 
 

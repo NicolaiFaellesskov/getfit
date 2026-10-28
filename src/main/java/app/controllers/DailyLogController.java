@@ -6,6 +6,8 @@ import app.DTOs.DailyLogDTO;
 
 import app.entities.DailyLog;
 import app.entities.User;
+import app.exceptions.ApiException;
+import app.exceptions.DatabaseException;
 import app.persistence.DailyLogMapper;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
@@ -31,30 +33,35 @@ public class DailyLogController {
         int id = ctx.pathParamAsClass("id", Integer.class)
                 .check(this::validatePrimaryKey, "Not a valid id")
                 .get();
-
-        DailyLog dailyLog = dao.findById(id);
-
-        if (!belongsToUser(dailyLog, userId)) {
-            ctx.status(403).json(Map.of(
-                    "error", "You do not have access to this daily log"
-            ));
-            return;
+        try {
+            DailyLog dailyLog = dao.findById(id);
+            if (!belongsToUser(dailyLog, userId)) {
+                ctx.status(403).json(Map.of(
+                        "error", "You do not have access to this daily log"
+                ));
+                return;
+            }
+            ctx.status(200);
+            ctx.json(DailyLogMapper.toDTO(dailyLog));
+        } catch (DatabaseException e) {
+            throw new ApiException(404, e.getMessage());
         }
-        ctx.status(200);
-        ctx.json(DailyLogMapper.toDTO(dailyLog));
     }
 
     public void readAll(Context ctx) {
         Integer userId = ctx.attribute("userId");
 
+        try {
+            List<DailyLogDTO> dailyLogs = dao.findByUserId(userId)
+                    .stream()
+                    .map(DailyLogMapper::toDTO)
+                    .toList();
 
-        List<DailyLogDTO> dailyLogs = dao.findByUserId(userId)
-                .stream()
-                .map(DailyLogMapper::toDTO)
-                .toList();
-
-        ctx.status(200);
-        ctx.json(dailyLogs);
+            ctx.status(200);
+            ctx.json(dailyLogs);
+        }catch(DatabaseException e){
+            throw new ApiException(404, e.getMessage());
+        }
     }
 
     public void create(Context ctx) {
@@ -65,11 +72,14 @@ public class DailyLogController {
         User user = new User();
         user.setId(userId);
         dailyLog.setUser(user);
-
-        dao.save(dailyLog);
-
+        try {
+            dao.save(dailyLog);
+        } catch (DatabaseException e) {
+            throw new ApiException(500, e.getMessage());
+        }
         ctx.status(201);
         ctx.json(DailyLogMapper.toDTO(dailyLog));
+
     }
 
 
@@ -79,26 +89,29 @@ public class DailyLogController {
         int id = ctx.pathParamAsClass("id", Integer.class)
                 .check(this::validatePrimaryKey, "Not a valid id")
                 .get();
+        try {
+            DailyLog existing = dao.findById(id);
+            if (!belongsToUser(existing, userId)) {
+                ctx.status(403).json(Map.of(
+                        "error", "You do not have access to this daily log"
+                ));
+                return;
+            }
 
-        DailyLog existing = dao.findById(id);
+            DailyLog request = ctx.bodyAsClass(DailyLog.class);
 
-        if (!belongsToUser(existing, userId)) {
-            ctx.status(403).json(Map.of(
-                    "error", "You do not have access to this daily log"
-            ));
-            return;
+            if (request.getCreatedAt() != null) {
+                existing.setCreatedAt(request.getCreatedAt());
+            }
+
+            dao.update(existing);
+
+            ctx.status(200);
+            ctx.json(DailyLogMapper.toDTO(existing));
+        } catch (DatabaseException e) {
+            throw new ApiException(404, e.getMessage());
         }
 
-        DailyLog request = ctx.bodyAsClass(DailyLog.class);
-
-        if (request.getCreatedAt() != null) {
-            existing.setCreatedAt(request.getCreatedAt());
-        }
-
-        dao.update(existing);
-
-        ctx.status(200);
-        ctx.json(DailyLogMapper.toDTO(existing));
     }
 
     public void delete(Context ctx) {
@@ -107,23 +120,31 @@ public class DailyLogController {
         int id = ctx.pathParamAsClass("id", Integer.class)
                 .check(this::validatePrimaryKey, "Not a valid id")
                 .get();
+        try {
+            DailyLog dailyLog = dao.findById(id);
 
-        DailyLog dailyLog = dao.findById(id);
+            if (!belongsToUser(dailyLog, userId)) {
+                ctx.status(403).json(Map.of(
+                        "error", "You do not have access to this daily log"
+                ));
+                return;
+            }
 
-        if (!belongsToUser(dailyLog, userId)) {
-            ctx.status(403).json(Map.of(
-                    "error", "You do not have access to this daily log"
-            ));
-            return;
+            dao.delete(id);
+            ctx.status(204);
+        }catch(DatabaseException e){
+            throw new ApiException(404, e.getMessage());
         }
-
-        dao.delete(id);
-        ctx.status(204);
     }
 
     private boolean validatePrimaryKey(Integer id) {
-        return dao.findById(id) != null;
+        try {
+            return dao.findById(id) != null;
+        }catch(DatabaseException e){
+            throw new ApiException(404, e.getMessage());
+        }
     }
+
     private boolean belongsToUser(DailyLog dailyLog, Integer userId) {
         return dailyLog != null
                 && dailyLog.getUser() != null

@@ -13,11 +13,14 @@ import app.entities.DailyLog;
 import app.entities.Food;
 import app.entities.FoodAmount;
 import app.entities.Meal;
+import app.exceptions.ApiException;
+import app.exceptions.DatabaseException;
 import app.persistence.FoodAmountMapper;
 import app.persistence.FoodMapper;
 import app.persistence.MealMapper;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
+import org.hibernate.boot.model.relational.Database;
 
 import java.util.List;
 
@@ -74,31 +77,33 @@ public class MealController {
     public void create(Context ctx) {
         Integer userId = ctx.attribute("userId");
         MealDTO request = ctx.bodyAsClass(MealDTO.class);
+        try {
+            DailyLog dailyLog = dailyLogDAO.findById(
+                    request.getDailyLogId()
+            );
 
-        DailyLog dailyLog = dailyLogDAO.findById(
-                request.getDailyLogId()
-        );
+            if (dailyLog.getUser() == null
+                    || !dailyLog.getUser().
 
-        if (dailyLog == null) {
-            ctx.status(404).result("DailyLog not found");
-            return;
+                    getId().
+
+                    equals(userId)) {
+                ctx.status(403).result("Access denied");
+                return;
+            }
+
+            Meal meal = Meal.builder()
+                    .mealName(request.getMealName())
+                    .dailyLog(dailyLog)
+                    .build();
+            dailyLog.addMeal(meal);
+            mealDAO.save(meal);
+
+            ctx.status(201);
+            ctx.json(MealMapper.toDTO(meal));
+        } catch (DatabaseException e) {
+            throw new ApiException(404, e.getMessage());
         }
-
-        if (dailyLog.getUser() == null
-                || !dailyLog.getUser().getId().equals(userId)) {
-            ctx.status(403).result("Access denied");
-            return;
-        }
-
-        Meal meal = Meal.builder()
-                .mealName(request.getMealName())
-                .dailyLog(dailyLog)
-                .build();
-        dailyLog.addMeal(meal);
-        mealDAO.save(meal);
-
-        ctx.status(201);
-        ctx.json(MealMapper.toDTO(meal));
     }
 
     public void update(Context ctx) {
@@ -119,29 +124,27 @@ public class MealController {
         }
 
         MealDTO request = ctx.bodyAsClass(MealDTO.class);
+        try {
+            DailyLog dailyLog = dailyLogDAO.findById(
+                    request.getDailyLogId()
+            );
 
-        DailyLog dailyLog = dailyLogDAO.findById(
-                request.getDailyLogId()
-        );
+            if (dailyLog.getUser() == null
+                    || !dailyLog.getUser().getId().equals(userId)) {
+                ctx.status(403).result("Access denied");
+                return;
+            }
 
-        if (dailyLog == null) {
-            ctx.status(404).result("DailyLog not found");
-            return;
+            meal.setMealName(request.getMealName());
+            meal.setDailyLog(dailyLog);
+
+            mealDAO.update(meal);
+
+            ctx.status(200);
+            ctx.json(MealMapper.toDTO(meal));
+        }catch(DatabaseException e){
+            throw new ApiException(404, e.getMessage());
         }
-
-        if (dailyLog.getUser() == null
-                || !dailyLog.getUser().getId().equals(userId)) {
-            ctx.status(403).result("Access denied");
-            return;
-        }
-
-        meal.setMealName(request.getMealName());
-        meal.setDailyLog(dailyLog);
-
-        mealDAO.update(meal);
-
-        ctx.status(200);
-        ctx.json(MealMapper.toDTO(meal));
     }
 
     public void delete(Context ctx) {
@@ -198,13 +201,21 @@ public class MealController {
         // Find eksisterende produkt via stregkode
         if (foodDTO.getBarcode() != null
                 && !foodDTO.getBarcode().isBlank()) {
-            food = foodDAO.findByBarcode(foodDTO.getBarcode());
+            try {
+                food = foodDAO.findByBarcode(foodDTO.getBarcode());
+            } catch (DatabaseException e) {
+                throw new ApiException(404, e.getMessage());
+            }
         }
 
         // Opret kun produktet, hvis det ikke findes
         if (food == null) {
             food = FoodMapper.toEntity(foodDTO);
-            foodDAO.save(food);
+            try {
+                foodDAO.save(food);
+            } catch (DatabaseException e) {
+                throw new ApiException(500, e.getMessage());
+            }
         }
 
         // Knyt produktet til måltidet med den angivne mængde
@@ -212,6 +223,7 @@ public class MealController {
                 .food(food)
                 .gram(request.getAmount())
                 .build();
+
         meal.addFoodAmount(foodAmount);
         foodAmountDAO.save(foodAmount);
 
@@ -222,6 +234,7 @@ public class MealController {
     private boolean validatePrimaryKey(Integer id) {
         return mealDAO.findById(id) != null;
     }
+
     private boolean belongsToUser(Meal meal, Integer userId) {
         return meal != null
                 && meal.getDailyLog() != null
