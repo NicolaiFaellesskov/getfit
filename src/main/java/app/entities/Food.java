@@ -10,13 +10,18 @@ import lombok.*;
 @Builder
 @ToString
 @Entity
+@Table(uniqueConstraints= {
+        @UniqueConstraint(columnNames = {"name", "brand"})
+})
 public class Food {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "name")
     private String name;
+    @Column(name = "brand")
     private String brand;
     private String barcode;
     private String type;
