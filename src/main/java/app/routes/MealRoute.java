@@ -19,7 +19,7 @@
                 put("/{id}", mealController::update);
                 delete("/{id}", mealController::delete);
                 post("/{id}/food", mealController::addFoodAmount);
-
+                delete("/food/{foodAmountId}", mealController::deleteFoodAmount);
             };
         }
     }

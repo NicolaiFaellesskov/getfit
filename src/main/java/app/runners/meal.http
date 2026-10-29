@@ -1,6 +1,6 @@
 ### Create meal
 POST http://localhost:7070/api/meals
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjczMzc3LCJleHAiOjE3OTMyNzY5Nzd9.ptY7GavpiowBkVzeZGZEovweYeFwXTFIqJJsEvCUuHk
 Content-Type: application/json
 
 {
@@ -10,18 +10,18 @@ Content-Type: application/json
 
 ### Get all my meals
 GET http://localhost:7070/api/meals
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjcyNjUzLCJleHAiOjE3OTMyNzYyNTN9.b7RbXPDZsEIEAIEUVukDgdo2_zliFYv4u9VSw5-h82E
 Accept: application/json
 
-### Get meal by id
+### Get meal by mealId
 GET http://localhost:7070/api/meals/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjczMzc3LCJleHAiOjE3OTMyNzY5Nzd9.ptY7GavpiowBkVzeZGZEovweYeFwXTFIqJJsEvCUuHk
 Accept: application/json
 
 
 ### Update meal
 PUT http://localhost:7070/api/meals/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjcyNjUzLCJleHAiOjE3OTMyNzYyNTN9.b7RbXPDZsEIEAIEUVukDgdo2_zliFYv4u9VSw5-h82E
 Content-Type: application/json
 
 {
@@ -29,28 +29,14 @@ Content-Type: application/json
   "dailyLogId": 2
 }
 
-### Delete meal by id
+### Delete meal by mealId
 DELETE http://localhost:7070/api/meals/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjcyNjUzLCJleHAiOjE3OTMyNzYyNTN9.b7RbXPDZsEIEAIEUVukDgdo2_zliFYv4u9VSw5-h82E
 
 
-### Add food to meal
+### Add food to meal by mealId
 POST http://localhost:7070/api/meals/1/food
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxNiIsImlhdCI6MTc5MzA0MjUwNCwiZXhwIjoxNzkzMDQ2MTA0fQ.rXLJLEgaHnsfU9Syr1bIYBJ4g905Ee2W27tJR_cQ38w
-Content-Type: application/json
-
-{
-  "food": {
-    "code": "3017620422003",
-    "product_name": "Nutella",
-    "brands": "Ferrero"
-  },
-  "amount": 30
-}
-
-### Add food to meal by id
-POST http://localhost:7070/api/meals/2/food
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY5NTg4LCJleHAiOjE3OTMyNzMxODh9.XJsjFzckSNJCQQpyuwyXzbee2XwQYiNd7IBWX5MjHNA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjczMzc3LCJleHAiOjE3OTMyNzY5Nzd9.ptY7GavpiowBkVzeZGZEovweYeFwXTFIqJJsEvCUuHk
 Content-Type: application/json
 
 {
@@ -69,5 +55,9 @@ Content-Type: application/json
       "saturated-fat_100g": 10.6
     }
   },
-  "amount": 30
+  "amount": 4
 }
+
+### Delete food amount by foodAmountId
+DELETE http://localhost:7070/api/meals/food/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjcyNjUzLCJleHAiOjE3OTMyNzYyNTN9.b7RbXPDZsEIEAIEUVukDgdo2_zliFYv4u9VSw5-h82E
