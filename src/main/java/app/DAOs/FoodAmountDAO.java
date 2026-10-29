@@ -33,5 +33,46 @@ public class FoodAmountDAO {
             em.close();
         }
     }
+    public FoodAmount findById(int id) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            return em.find(FoodAmount.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<FoodAmount> findAll() {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            return em.createQuery(
+                    "SELECT fa FROM FoodAmount fa",
+                    FoodAmount.class
+            ).getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+
+    public void delete(int id) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            FoodAmount foodAmount = em.find(FoodAmount.class, id);
+
+            if (foodAmount != null) {
+                em.remove(foodAmount);
+            }
+
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
 }
 

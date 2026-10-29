@@ -1,11 +1,11 @@
 ### Create meal
 POST http://localhost:7070/api/meals
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjczMzc3LCJleHAiOjE3OTMyNzY5Nzd9.ptY7GavpiowBkVzeZGZEovweYeFwXTFIqJJsEvCUuHk
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjc0NjAxLCJleHAiOjE3OTMyNzgyMDF9.m6HwAnd3p3-Ngq3wp-akSepkV6cwETpW5S7dtspVj5U
 Content-Type: application/json
 
 {
   "mealName": "Breakfast",
-  "dailyLogId": 2
+  "dailyLogId": 1
 }
 
 ### Get all my meals
@@ -36,7 +36,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzd
 
 ### Add food to meal by mealId
 POST http://localhost:7070/api/meals/1/food
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjczMzc3LCJleHAiOjE3OTMyNzY5Nzd9.ptY7GavpiowBkVzeZGZEovweYeFwXTFIqJJsEvCUuHk
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjc0NjAxLCJleHAiOjE3OTMyNzgyMDF9.m6HwAnd3p3-Ngq3wp-akSepkV6cwETpW5S7dtspVj5U
 Content-Type: application/json
 
 {
@@ -55,9 +55,9 @@ Content-Type: application/json
       "saturated-fat_100g": 10.6
     }
   },
-  "amount": 4
+  "amount": 6
 }
 
 ### Delete food amount by foodAmountId
-DELETE http://localhost:7070/api/meals/food/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjcyNjUzLCJleHAiOjE3OTMyNzYyNTN9.b7RbXPDZsEIEAIEUVukDgdo2_zliFYv4u9VSw5-h82E
+DELETE http://localhost:7070/api/meals/food/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjc0NjAxLCJleHAiOjE3OTMyNzgyMDF9.m6HwAnd3p3-Ngq3wp-akSepkV6cwETpW5S7dtspVj5U

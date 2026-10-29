@@ -1,7 +1,7 @@
 
 ### Create daily log
 POST http://localhost:7070/api/dailylogs
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjczMzc3LCJleHAiOjE3OTMyNzY5Nzd9.ptY7GavpiowBkVzeZGZEovweYeFwXTFIqJJsEvCUuHk
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjc0NjAxLCJleHAiOjE3OTMyNzgyMDF9.m6HwAnd3p3-Ngq3wp-akSepkV6cwETpW5S7dtspVj5U
 Content-Type: application/json
 
 {
