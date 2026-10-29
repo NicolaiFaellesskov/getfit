@@ -1,4 +1,4 @@
-# getFit
+# getFitter
 
 Backend API til en fitness-app, hvor man kan tracke sin mad over dagen.
 
