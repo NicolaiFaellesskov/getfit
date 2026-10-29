@@ -6,10 +6,13 @@ import app.exceptions.DatabaseException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class DailyLogDAO {
+    private static final Logger logger = LoggerFactory.getLogger(DailyLogDAO.class);
 
     private final EntityManagerFactory emf;
 
@@ -25,6 +28,7 @@ public class DailyLogDAO {
             em.persist(dailyLog);
             em.getTransaction().commit();
         } catch (RuntimeException e) {
+            logger.error("Failed to save DailyLog", e);
             throw new DatabaseException("Error, can't save dailyLog", e.getMessage());
         } finally {
             em.close();
@@ -65,6 +69,7 @@ public class DailyLogDAO {
             em.merge(dailyLog);
             em.getTransaction().commit();
         } catch (PersistenceException e) {
+            logger.error("Failed to update DailyLog", e);
             throw new DatabaseException("Error, cannot update", e.getMessage());
         } finally {
             em.close();

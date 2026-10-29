@@ -11,6 +11,8 @@ import app.exceptions.DatabaseException;
 import app.persistence.DailyLogMapper;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DailyLogController {
+    private static final Logger logger = LoggerFactory.getLogger(DailyLogController.class);
 
     private final DailyLogDAO dao;
 
@@ -74,6 +77,7 @@ public class DailyLogController {
         dailyLog.setUser(user);
         try {
             dao.save(dailyLog);
+            logger.info("Dailylog created for user {}", userId);
         } catch (DatabaseException e) {
             throw new ApiException(500, e.getMessage());
         }
@@ -131,6 +135,7 @@ public class DailyLogController {
             }
 
             dao.delete(id);
+            logger.info("Successfully deleted dailylog from user {}", userId);
             ctx.status(204);
         }catch(DatabaseException e){
             throw new ApiException(404, e.getMessage());

@@ -1,8 +1,14 @@
 package app;
 
-import app.config.ApplicationConfig; import app.routes.Routes;
+import app.config.ApplicationConfig;
+import app.routes.Routes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
+
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final Logger debugLogger = LoggerFactory.getLogger("app");
 
     public static void main(String[] args) {
 
@@ -12,4 +18,8 @@ public class Main {
                 .cors()
                 .exceptions()
                 .apiExceptions()
-                .start(7070); } }
+                .start(7070);
+
+                logger.info("App has successfully started on port 7070");
+    }
+}
