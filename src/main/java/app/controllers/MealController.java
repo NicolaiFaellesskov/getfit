@@ -255,6 +255,8 @@
             ctx.json(FoodAmountMapper.toDTO(foodAmount));
         }
 
+
+
         private boolean belongsToUser(Meal meal, Integer userId) {
             return meal != null
                     && meal.getDailyLog() != null

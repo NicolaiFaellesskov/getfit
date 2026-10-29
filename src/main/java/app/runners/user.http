@@ -5,7 +5,7 @@ Accept: application/json
 
 ### Update user
 PUT http://localhost:7070/api/users/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjY2OTM4LCJleHAiOjE3OTMyNzA1Mzh9.bX3dfTWN6LXifTcZkCkUq1lpv4nb0Lh9sfCdWWRr-jM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjczMzc3LCJleHAiOjE3OTMyNzY5Nzd9.ptY7GavpiowBkVzeZGZEovweYeFwXTFIqJJsEvCUuHk
 Content-Type: application/json
 
 {

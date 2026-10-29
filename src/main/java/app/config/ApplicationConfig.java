@@ -1,6 +1,8 @@
 package app.config;
 
 import app.exceptions.ApiException;
+import app.security.ISecurityController;
+import app.security.SecurityController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.javalin.Javalin;
@@ -50,64 +52,11 @@ public class ApplicationConfig {
 
     public ApplicationConfig security() {
         configSteps.add(config -> {
+            ISecurityController securityController = new SecurityController();
 
-            TokenService tokenService = new TokenService();
-
-            config.routes.before(ctx -> {
-
-                String path = ctx.path();
-                HandlerType method = ctx.method();
-
-                // Allow CORS preflight requests
-                if (method == HandlerType.OPTIONS) {
-                    return;
-                }
-
-                // Login must be public
-                if (path.endsWith("/auth/login")) {
-                    return;
-                }
-
-                // Allow new users to register
-                if (path.endsWith("/users")
-                        && method == HandlerType.POST) {
-                    return;
-                }
-
-                // Read the Authorization header
-                String authHeader = ctx.header("Authorization");
-
-                if (authHeader == null
-                        || !authHeader.startsWith("Bearer ")) {
-
-                    ctx.status(401).json(Map.of(
-                            "error", "Missing or invalid Authorization header"
-                    ));
-
-                    ctx.skipRemainingHandlers();
-                    return;
-                }
-
-                // Validate the JWT
-                try {
-                    String token = authHeader.substring(7);
-
-                    Integer userId =
-                            tokenService.validateToken(token);
-
-                    ctx.attribute("userId", userId);
-
-                } catch (IllegalArgumentException e) {
-
-                    ctx.status(401).json(Map.of(
-                            "error", "Invalid or expired token"
-                    ));
-
-                    ctx.skipRemainingHandlers();
-                }
-            });
+            config.routes.beforeMatched(securityController::authenticate);
+            config.routes.beforeMatched(securityController::authorize);
         });
-
         return this;
     }
 

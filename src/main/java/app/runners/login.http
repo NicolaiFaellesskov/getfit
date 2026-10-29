@@ -23,7 +23,7 @@ Content-Type: application/json
 ### Get users with user A's JWT
 
 GET http://localhost:7070/api/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjY2OTM4LCJleHAiOjE3OTMyNzA1Mzh9.bX3dfTWN6LXifTcZkCkUq1lpv4nb0Lh9sfCdWWRr-jM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjcyNjUzLCJleHAiOjE3OTMyNzYyNTN9.b7RbXPDZsEIEAIEUVukDgdo2_zliFYv4u9VSw5-h82E
 Accept: application/json
 
 

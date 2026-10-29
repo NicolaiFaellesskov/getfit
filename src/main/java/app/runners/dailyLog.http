@@ -1,7 +1,7 @@
 
 ### Create daily log
 POST http://localhost:7070/api/dailylogs
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjczMzc3LCJleHAiOjE3OTMyNzY5Nzd9.ptY7GavpiowBkVzeZGZEovweYeFwXTFIqJJsEvCUuHk
 Content-Type: application/json
 
 {
@@ -10,25 +10,18 @@ Content-Type: application/json
 
 ### Get all my daily logs
 GET http://localhost:7070/api/dailylogs
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjczMzc3LCJleHAiOjE3OTMyNzY5Nzd9.ptY7GavpiowBkVzeZGZEovweYeFwXTFIqJJsEvCUuHk
 Accept: application/json
 
 ### Get daily log by id
 GET http://localhost:7070/api/dailylogs/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjcyNjUzLCJleHAiOjE3OTMyNzYyNTN9.b7RbXPDZsEIEAIEUVukDgdo2_zliFYv4u9VSw5-h82E
 Accept: application/json
 
-### 4. Bruger A: Opdater sin DailyLog (update)
-
-PUT http://localhost:7070/api/dailylogs/7
-Authorization: Bearer INDSÆT_BRUGER_A_TOKEN
-Content-Type: application/json
-
-{}
 
 ### Update daily log
 PUT http://localhost:7070/api/dailylogs/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjcyNjUzLCJleHAiOjE3OTMyNzYyNTN9.b7RbXPDZsEIEAIEUVukDgdo2_zliFYv4u9VSw5-h82E
 Content-Type: application/json
 
 {
@@ -37,6 +30,6 @@ Content-Type: application/json
 
 ### Delete daily log
 DELETE http://localhost:7070/api/dailylogs/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjcyNjUzLCJleHAiOjE3OTMyNzYyNTN9.b7RbXPDZsEIEAIEUVukDgdo2_zliFYv4u9VSw5-h82E
 
 
