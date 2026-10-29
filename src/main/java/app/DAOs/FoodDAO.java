@@ -49,9 +49,7 @@ public class FoodDAO {
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
-            if (food == null) {
-                throw new DatabaseException("error, barcode does not exist");
-            }
+
             return food;
         } finally {
             em.close();

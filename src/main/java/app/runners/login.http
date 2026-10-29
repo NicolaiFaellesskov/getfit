@@ -1,62 +1,29 @@
-### Create user A
+### Create user
 
 POST http://localhost:7070/api/users
 Content-Type: application/json
 
 {
-  "username": "jwtTestC",
+  "username": "newUser",
   "password": "Test1234!"
 }
 
-###
 
-### Create user B
-
-POST http://localhost:7070/api/users
-Content-Type: application/json
-
-{
-  "username": "jwtTestB",
-  "password": "Test1234!"
-}
-
-###
-
-### Login with user A
+### Login with user
 
 POST http://localhost:7070/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "jwtTestC",
+  "username": "newUser",
   "password": "Test1234!"
 }
 
-###
-
-### Login with user B
-
-POST http://api.getfitter.dk/api/auth/login
-Content-Type: application/json
-
-{
-  "username": "jwtTestB",
-  "password": "Test1234!"
-}
-
-###
 
 ### Get users with user A's JWT
 
 GET http://localhost:7070/api/users
-Authorization: Bearer INDSÆT_BRUGER_A_TOKEN
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjY2OTM4LCJleHAiOjE3OTMyNzA1Mzh9.bX3dfTWN6LXifTcZkCkUq1lpv4nb0Lh9sfCdWWRr-jM
 Accept: application/json
 
-###
-
-### Get users with user B's JWT
-
-GET http://localhost:7070/api/users
-Authorization: Bearer INDSÆT_BRUGER_B_TOKEN
-Accept: application/json
 

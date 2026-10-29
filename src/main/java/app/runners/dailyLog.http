@@ -1,30 +1,22 @@
-### 1. Bruger A: Opret DailyLog
 
+### Create daily log
 POST http://localhost:7070/api/dailylogs
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxNiIsImlhdCI6MTc5MzA0MjUwNCwiZXhwIjoxNzkzMDQ2MTA0fQ.rXLJLEgaHnsfU9Syr1bIYBJ4g905Ee2W27tJR_cQ38w
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
 Content-Type: application/json
 
 {
-  "createdAt": "2026-10-09"
+  "createdAt": "2026-10-29"
 }
 
-###
-
-### 2. Bruger A: Hent alle egne DailyLogs (readAll)
-
+### Get all my daily logs
 GET http://localhost:7070/api/dailylogs
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxNiIsImlhdCI6MTc5MzA0MjUwNCwiZXhwIjoxNzkzMDQ2MTA0fQ.rXLJLEgaHnsfU9Syr1bIYBJ4g905Ee2W27tJR_cQ38w
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
 Accept: application/json
 
-###
-
-### 3. Bruger A: Hent sin DailyLog (read)
-
-GET http://localhost:7070/api/dailylogs/14
-Authorization: Bearer INDSÆT_BRUGER_A_TOKEN
+### Get daily log by id
+GET http://localhost:7070/api/dailylogs/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
 Accept: application/json
-
-###
 
 ### 4. Bruger A: Opdater sin DailyLog (update)
 
@@ -34,42 +26,17 @@ Content-Type: application/json
 
 {}
 
-### 5. Bruger B: Hent alle egne DailyLogs (readAll)
-
-GET http://localhost:7070/api/dailylogs
-Authorization: Bearer INDSÆT_BRUGER_B_TOKEN
-Accept: application/json
-
-###
-
-### 6. Bruger B: Kan ikke hente bruger A's DailyLog
-
-GET http://localhost:7070/api/dailylogs/7
-Authorization: Bearer INDSÆT_BRUGER_B_TOKEN
-Accept: application/json
-
-###
-
-### 7. Bruger B: Kan ikke opdatere bruger A's DailyLog
-
-PUT http://localhost:7070/api/dailylogs/7
-Authorization: Bearer INDSÆT_BRUGER_B_TOKEN
+### Update daily log
+PUT http://localhost:7070/api/dailylogs/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
 Content-Type: application/json
 
 {
-  "createdAt": "2026-10-07"
+  "createdAt": "2026-10-30"
 }
 
-###
+### Delete daily log
+DELETE http://localhost:7070/api/dailylogs/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
 
-### 8. Bruger B: Kan ikke slette bruger A's DailyLog
 
-DELETE http://localhost:7070/api/dailylogs/7
-Authorization: Bearer INDSÆT_BRUGER_B_TOKEN
-
-###
-
-### 9. Bruger A: Slet sin egen DailyLog
-
-DELETE http://localhost:7070/api/dailylogs/7
-Authorization: Bearer INDSÆT_BRUGER_A_TOKEN

@@ -1,0 +1,5 @@
+### Search food
+
+GET https://api.getfitter.dk/api/food?search=Chicken
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
+Accept: application/json

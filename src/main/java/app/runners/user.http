@@ -1,0 +1,27 @@
+### Get user by id
+GET http://localhost:7070/api/users/1
+Authorization: Bearer INDSÆT_TOKEN
+Accept: application/json
+
+### Update user
+PUT http://localhost:7070/api/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjY2OTM4LCJleHAiOjE3OTMyNzA1Mzh9.bX3dfTWN6LXifTcZkCkUq1lpv4nb0Lh9sfCdWWRr-jM
+Content-Type: application/json
+
+{
+  "username": "newName",
+  "password": "newPassword123!"
+}
+
+### Delete user
+DELETE http://localhost:7070/api/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjY3MDIwLCJleHAiOjE3OTMyNzA2MjB9.Zf3MYrtblEwDn2OUd1okgEzm_O3F1C_7z9ncFJwUyNA
+
+### Add role to user
+POST http://localhost:7070/api/users/jwtTestC/roles
+Authorization: Bearer INDSÆT_TOKEN
+Content-Type: application/json
+
+{
+  "role": "admin"
+}
