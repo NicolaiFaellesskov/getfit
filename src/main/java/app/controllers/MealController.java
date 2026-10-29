@@ -255,7 +255,27 @@
             ctx.json(FoodAmountMapper.toDTO(foodAmount));
         }
 
+        public void deleteFoodAmount(Context ctx) {
+            Integer userId = ctx.attribute("userId");
+            int foodAmountId = ctx.pathParamAsClass("foodAmountId", Integer.class).get();
 
+            FoodAmount foodAmount = foodAmountDAO.findById(foodAmountId);
+
+            if (foodAmount == null) {
+                ctx.status(404).result("Food amount not found");
+                return;
+            }
+
+            Meal meal = foodAmount.getMeal();
+
+            if (!belongsToUser(meal, userId)) {
+                ctx.status(403).result("Access denied");
+                return;
+            }
+
+            foodAmountDAO.delete(foodAmountId);
+            ctx.status(204);
+        }
 
         private boolean belongsToUser(Meal meal, Integer userId) {
             return meal != null
