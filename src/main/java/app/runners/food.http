@@ -1,5 +1,10 @@
 ### Search food
 
 GET https://api.getfitter.dk/api/food?search=Chicken
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIyIiwiaWF0IjoxNzkzMjY3OTYxLCJleHAiOjE3OTMyNzE1NjF9.wbmrykaKIXN2D5kasY2BEGJtXlum2jqbc6YtS-tAYeo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjk3MzEwLCJleHAiOjE3OTMzMDA5MTB9.UfXyPKdelrVDHithU40B2Q6YE_y5lUwtCwqI0G4eGuQ
+Accept: application/json
+
+### Search food
+GET http://localhost:7070/api/food?search=Chicken
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kYXQiLCJzdWIiOiIxIiwiaWF0IjoxNzkzMjk3MzEwLCJleHAiOjE3OTMzMDA5MTB9.UfXyPKdelrVDHithU40B2Q6YE_y5lUwtCwqI0G4eGuQ
 Accept: application/json
