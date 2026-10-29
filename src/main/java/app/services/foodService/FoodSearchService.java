@@ -64,8 +64,4 @@ public class FoodSearchService {
 
         return executor.submit(task);
     }
-
-    public void shutdown() {
-        executor.shutdown();
-    }
 }

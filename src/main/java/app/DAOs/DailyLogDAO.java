@@ -1,7 +1,6 @@
 package app.DAOs;
 
 import app.entities.DailyLog;
-import app.exceptions.ApiException;
 import app.exceptions.DatabaseException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

@@ -11,7 +11,6 @@ public class SecurityController implements ISecurityController {
 
     @Override
     public void authenticate(Context ctx) {
-        // CORS preflight
         if (ctx.method() == HandlerType.OPTIONS) {
             return;
         }
@@ -19,7 +18,6 @@ public class SecurityController implements ISecurityController {
         String path = ctx.path();
         HandlerType method = ctx.method();
 
-        // Offentlige endpoints
         if (path.endsWith("/auth/login")) {
             return;
         }
@@ -51,6 +49,6 @@ public class SecurityController implements ISecurityController {
 
     @Override
     public void authorize(Context ctx) {
-        // Ingen roller endnu – intet at tjekke
+        // No role yet.
     }
 }

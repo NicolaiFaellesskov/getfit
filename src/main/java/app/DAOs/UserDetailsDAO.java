@@ -1,6 +1,5 @@
 package app.DAOs;
 
-import app.entities.Food;
 import app.entities.UserDetails;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

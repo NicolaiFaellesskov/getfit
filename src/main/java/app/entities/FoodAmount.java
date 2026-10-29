@@ -18,13 +18,13 @@ public class FoodAmount {
 
     private int gram;
 
-    // Relation m:1
+
 
     @ManyToOne
     @ToString.Exclude
     private Meal meal;
 
-    // Relation m:1
+
 
     @ManyToOne
     @ToString.Exclude

@@ -22,13 +22,13 @@ public class DailyLog {
 
     private LocalDate createdAt;
 
-    // Relation m:1
+
 
     @ManyToOne
     @ToString.Exclude
     private User user;
 
-    // Relation 1:m
+
 
     @OneToMany(mappedBy = "dailyLog", cascade = CascadeType.ALL)
     @Builder.Default
@@ -36,7 +36,7 @@ public class DailyLog {
     private Set<Meal> meals = new HashSet<>();
 
 
-    // Bi-directional update
+
 
     public void addMeal(Meal meal) {
         if (meal != null) {

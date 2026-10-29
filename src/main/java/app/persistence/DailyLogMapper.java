@@ -15,11 +15,7 @@ public class DailyLogMapper {
         return DailyLogDTO.builder()
                 .id(dailyLog.getId())
                 .createdAt(dailyLog.getCreatedAt())
-                .meals(dailyLog.getMeals() == null
-                        ? null
-                        : dailyLog.getMeals().stream()
-                        .map(MealMapper::toDTO)
-                        .collect(Collectors.toSet()))
+                .meals(dailyLog.getMeals() == null ? null : dailyLog.getMeals().stream().map(MealMapper::toDTO).collect(Collectors.toSet()))
                 .build();
     }
 }

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -25,7 +24,6 @@ public class UserDetails {
     private int height;
     private String gender;
 
-    // Relation 1:1
 
     @OneToOne
     @JoinColumn(name = "user_id", unique = true)

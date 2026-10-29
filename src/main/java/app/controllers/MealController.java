@@ -217,7 +217,7 @@ public class MealController {
 
         Food food = null;
 
-        // Find eksisterende produkt via stregkode
+
         if (foodDTO.getBarcode() != null
                 && !foodDTO.getBarcode().isBlank()) {
             try {
@@ -227,7 +227,7 @@ public class MealController {
             }
         }
 
-        // Opret kun produktet, hvis det ikke findes
+
         if (food == null) {
             food = FoodMapper.toEntity(foodDTO);
             try {

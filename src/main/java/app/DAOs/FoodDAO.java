@@ -1,6 +1,4 @@
 package app.DAOs;
-
-import app.controllers.DailyLogController;
 import app.entities.Food;
 import app.exceptions.DatabaseException;
 import jakarta.persistence.EntityExistsException;
@@ -8,8 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 public class FoodDAO {
     private static final Logger logger = LoggerFactory.getLogger(FoodDAO.class);

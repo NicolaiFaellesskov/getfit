@@ -31,26 +31,26 @@ public class User implements ISecurityUser {
         return BCrypt.checkpw(pw, this.password);
     }
 
-    // Security constructor
+
     public User(String username, String password) {
         this.username = username;
         this.password = BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
-    // Relation 1:1
+
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @ToString.Exclude
     private UserDetails userDetails;
 
-    // Relation 1:m
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @ToString.Exclude
     @Builder.Default
     private Set<DailyLog> dailyLogs = new HashSet<>();
 
-    // Relation m:m
+
 
     @ManyToMany
     @JoinTable(
@@ -62,22 +62,6 @@ public class User implements ISecurityUser {
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
-    // Bi-directional update
-
-    public void addUserDetails(UserDetails userDetails) {
-        this.userDetails = userDetails;
-
-        if (userDetails != null) {
-            userDetails.setUser(this);
-        }
-    }
-
-    public void addDailyLog(DailyLog dailyLog) {
-        if (dailyLog != null) {
-            this.dailyLogs.add(dailyLog);
-            dailyLog.setUser(this);
-        }
-    }
 
     @Override
     public Set<String> getRolesAsStrings() {

@@ -15,17 +15,8 @@ public class MealMapper {
         return MealDTO.builder()
                 .id(meal.getId())
                 .mealName(meal.getMealName())
-                .dailyLogId(
-                        meal.getDailyLog() != null
-                                ? meal.getDailyLog().getId()
-                                : null
-                )
-                .foodAmounts(
-                        meal.getFoodAmounts()
-                                .stream()
-                                .map(FoodAmountMapper::toDTO)
-                                .collect(Collectors.toSet())
-                )
+                .dailyLogId(meal.getDailyLog() != null ? meal.getDailyLog().getId() : null)
+                .foodAmounts(meal.getFoodAmounts().stream().map(FoodAmountMapper::toDTO).collect(Collectors.toSet()))
                 .build();
     }
 }

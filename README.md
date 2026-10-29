@@ -100,8 +100,6 @@ Base: `/api`
 
 ## User stories
 
-## User stories
-
 ### Bruger og autentifikation
 
 **US-01 – Opret bruger**  
@@ -166,8 +164,6 @@ Som system ønsker jeg at genbruge en eksisterende fødevare, hvis stregkoden al
 ---
 
 ## Lidt om processen
-
-Lidt om processen
 
 Det meste af arbejdet gik med at få login, JWT og ownership til at fungere korrekt, så brugere kun kan tilgå deres egne data.
 

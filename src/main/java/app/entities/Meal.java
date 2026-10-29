@@ -21,21 +21,21 @@ public class Meal {
 
     private String mealName;
 
-    // Relation m:1
+
 
     @ManyToOne
     @ToString.Exclude
     private DailyLog dailyLog;
 
 
-    // Relation 1:m
+
 
     @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
     @Builder.Default
     private Set<FoodAmount> foodAmounts = new HashSet<>();
 
 
-    // Bi-directional update
+
 
     public void addFoodAmount(FoodAmount foodAmount) {
         if (foodAmount != null) {

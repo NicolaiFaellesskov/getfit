@@ -12,16 +12,8 @@ public class FoodAmountMapper {
 
         return FoodAmountDTO.builder()
                 .id(entity.getId())
-                .foodId(
-                        entity.getFood() != null
-                                ? entity.getFood().getId()
-                                : null
-                )
-                .foodName(
-                        entity.getFood() != null
-                                ? entity.getFood().getName()
-                                : null
-                )
+                .foodId(entity.getFood() != null ? entity.getFood().getId() : null)
+                .foodName(entity.getFood() != null ? entity.getFood().getName() : null)
                 .amount(entity.getGram())
                 .build();
     }

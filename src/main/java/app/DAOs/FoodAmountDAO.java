@@ -1,6 +1,5 @@
 package app.DAOs;
 
-
 import app.entities.FoodAmount;
 import app.exceptions.DatabaseException;
 import jakarta.persistence.EntityManager;

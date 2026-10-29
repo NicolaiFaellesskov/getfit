@@ -80,7 +80,7 @@ public class UserController {
 
         existingUser.setUsername(request.getUsername());
 
-        // Opdater kun password, hvis et nyt password er sendt.
+
         if (request.getPassword() != null
                 && !request.getPassword().isBlank()) {
             existingUser.setPassword(
